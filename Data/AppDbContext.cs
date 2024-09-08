@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
-using SkillSwap.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace SkillSwap.Data;
+namespace SkillSwap.Models;
 
 public partial class AppDbContext : DbContext
 {
@@ -16,8 +12,6 @@ public partial class AppDbContext : DbContext
         : base(options)
     {
     }
-
-    public virtual DbSet<Credential> Credentials { get; set; }
 
     public virtual DbSet<PrimaryAbility> PrimaryAbilities { get; set; }
 
@@ -36,27 +30,12 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UsersSecondaryAbility> UsersSecondaryAbilities { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .UseCollation("utf8_general_ci")
             .HasCharSet("utf8");
-
-        modelBuilder.Entity<Credential>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.Password)
-                .HasMaxLength(50)
-                .HasColumnName("password");
-        });
 
         modelBuilder.Entity<PrimaryAbility>(entity =>
         {
@@ -217,8 +196,6 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.HasIndex(e => e.IdCredential, "id_credential");
-
             entity.HasIndex(e => e.IdRol, "id_rol");
 
             entity.HasIndex(e => e.IdState, "id_state");
@@ -230,9 +207,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
-            entity.Property(e => e.IdCredential)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_credential");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasColumnName("email");
             entity.Property(e => e.IdQualification)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_qualification");
@@ -251,6 +228,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
+            entity.Property(e => e.Password)
+                .HasMaxLength(100)
+                .HasColumnName("password");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(30)
                 .HasColumnName("phone_number");
@@ -260,10 +240,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UrlLinkedin)
                 .HasMaxLength(100)
                 .HasColumnName("url_linkedin");
-
-            entity.HasOne(d => d.IdCredentialNavigation).WithMany(p => p.Users)
-                .HasForeignKey(d => d.IdCredential)
-                .HasConstraintName("Users_ibfk_3");
 
             entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdRol)
@@ -282,7 +258,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasIndex(e => e.IdSecondaryAbilitie, "id_secondary_abilitie");
 
-            entity.HasIndex(e => e.IdUser, "id_user");
+            entity.HasIndex(e => e.IdUser, "id_user1");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")

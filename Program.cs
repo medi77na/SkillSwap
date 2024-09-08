@@ -1,11 +1,17 @@
+using System.Text;
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using SkillSwap.Data;
+using Microsoft.IdentityModel.Tokens;
+using SkillSwap.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 Env.Load();
+
+builder.Configuration.AddEnvironmentVariables();
+builder.Services.AddControllers();
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
@@ -16,7 +22,33 @@ var conectionDB = $"server={dbHost};port={dbPort};database={dbDatabaseName};uid=
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(conectionDB, ServerVersion.Parse("8.0.20-mysql")));
 
-builder.Services.AddControllers();
+
+// Retrieving JWT variables from the .env file
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+var jwtExpireMinutes = Environment.GetEnvironmentVariable("JWT_EXPIREMINUTES");
+
+// Configure JWT
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -32,6 +64,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

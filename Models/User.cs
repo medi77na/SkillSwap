@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SkillSwap.Models;
+﻿namespace SkillSwap.Models;
 
 public partial class User
 {
     public int Id { get; set; }
+
+    public string Email { get; set; } = null!;
+
+    public string Password { get; set; } = null!;
 
     public string? Name { get; set; }
 
@@ -27,11 +28,7 @@ public partial class User
 
     public int? IdRol { get; set; }
 
-    public int? IdCredential { get; set; }
-
     public int? IdQualification { get; set; }
-
-    public virtual Credential? IdCredentialNavigation { get; set; }
 
     public virtual Role? IdRolNavigation { get; set; }
 
