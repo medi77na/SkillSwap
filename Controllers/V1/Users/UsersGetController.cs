@@ -43,7 +43,7 @@ public class UsersGetController : ControllerBase
     {
         // Obtain the users from the database and project only the desired fields.
         var users = _dbContext.Users
-        .Include(user => user.IdStateNavigation) // Hacemos el join con la tabla StateUser
+        .Include(user => user.IdStateNavigation)
         .Select(user => new UserGetDTO
         {
                 Id = user.Id,
