@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
 
@@ -31,6 +32,31 @@ public class UsersGetController : ControllerBase
                 UrlLinkedin = user.UrlLinkedin,
                 UrlImage = user.UrlImage,
                 PhoneNumber = user.PhoneNumber
+            })
+            .ToList();
+
+        return Ok(users);
+    }
+
+    [HttpGet("WithState")]
+    public IActionResult GetUsersAndState()
+    {
+        // Obtain the users from the database and project only the desired fields.
+        var users = _dbContext.Users
+        .Include(user => user.IdStateNavigation) // Hacemos el join con la tabla StateUser
+        .Select(user => new UserGetDTO
+        {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                LastName = user.LastName,
+                Description = user.Description,
+                JobTitle = user.JobTitle,
+                UrlLinkedin = user.UrlLinkedin,
+                UrlImage = user.UrlImage,
+                PhoneNumber = user.PhoneNumber,
+                IdState = user.IdState,
+                StateName = user.IdStateNavigation != null ? user.IdStateNavigation.Name : "No state"
             })
             .ToList();
 

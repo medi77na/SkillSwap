@@ -10,4 +10,6 @@ public class UserGetDTO
     public string? UrlLinkedin { get; set; }
     public string? UrlImage { get; set; }
     public string? PhoneNumber { get; set; }
+    public int? IdState { get; set; }
+    public string? StateName { get; set; }
 }
