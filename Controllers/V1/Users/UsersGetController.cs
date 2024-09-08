@@ -22,6 +22,7 @@ public class UsersGetController : ControllerBase
         var users = _dbContext.Users
             .Select(user => new UserGetDTO
             {
+                Id = user.Id,
                 Email = user.Email,
                 Name = user.Name,
                 LastName = user.LastName,

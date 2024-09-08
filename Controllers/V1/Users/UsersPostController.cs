@@ -24,6 +24,7 @@ public class UsersPostController : ControllerBase
         _passwordHasher = new PasswordHasher<User>();
     }
 
+    // User Creation
     [HttpPost]
     public IActionResult Register([FromBody] UserPostDTO userDTO)
     {
@@ -61,6 +62,7 @@ public class UsersPostController : ControllerBase
         return Ok("User registered successfully.");
     }
 
+    // User Login
     [HttpPost("login")]
     public IActionResult Login([FromBody] UserLoginPostDTO userLoginPostDTO)
     {
@@ -88,6 +90,7 @@ public class UsersPostController : ControllerBase
         return Ok(new { Token = token });
     }
 
+    // Generate JWT token for authenticated users
     private string GenerateJwtToken(User user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]));
