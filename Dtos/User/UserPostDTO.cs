@@ -27,7 +27,9 @@ public class UserPostDTO
 
     public string? PhoneNumber { get; set; }
 
-    public int? IdState { get; set; } = 1;
+    public int? IdState { get; set; } = null;
 
-    public int? IdRol { get; set; } = 2;
+    public int? IdRol { get; set; } = null;
+
+    public int? IdQualification { get; set; } = null;
 }

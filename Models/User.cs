@@ -1,5 +1,6 @@
 ﻿namespace SkillSwap.Models;
 
+/* Model referring to the user, his personal data, his skills, his role, etc. */
 public partial class User
 {
     public int Id { get; set; }
@@ -34,14 +35,16 @@ public partial class User
 
     public int? IdQualification { get; set; }
 
+    public Qualification Qualification { get; set; }
+
     public virtual Role? IdRolNavigation { get; set; }
 
     public virtual StateUser? IdStateNavigation { get; set; }
 
-    public virtual ICollection<Qualification> Qualifications { get; set; } = new List<Qualification>();
 
     public virtual ICollection<Request> RequestIdReceivingUserNavigations { get; set; } = new List<Request>();
 
     public virtual ICollection<Request> RequestIdRequestingUserNavigations { get; set; } = new List<Request>();
+
 
 }

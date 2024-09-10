@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkillSwap.Models;
 
@@ -11,9 +12,11 @@ using SkillSwap.Models;
 namespace SkillSwap.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240910135541_ArregloRelaciones")]
+    partial class ArregloRelaciones
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,20 +177,6 @@ namespace SkillSwap.Migrations
                         .HasName("PRIMARY");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Responsable de la gestión y configuración del sitio, incluyendo la moderación de contenido, la gestión de usuarios.",
-                            Name = "Administrador"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Un profesional que busca oportunidades laborales o empleadores que buscan candidatos.",
-                            Name = "Usuario"
-                        });
                 });
 
             modelBuilder.Entity("SkillSwap.Models.StateRequest", b =>
@@ -213,26 +202,6 @@ namespace SkillSwap.Migrations
                         .HasName("PRIMARY");
 
                     b.ToTable("State_requests", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "La solicitud ha sido enviada y está esperando revisión o respuesta por parte del destinatario.",
-                            Name = "Pendiente"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "La solicitud ha sido revisada y aceptada por el destinatario, lo que indica que se ha establecido una conexión o se ha acordado proceder con la solicitud.",
-                            Name = "Aceptado"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "La solicitud ha sido revisada pero no ha sido aceptada por el destinatario, lo que indica que no se procederá con la solicitud en este momento.",
-                            Name = "Rechazado"
-                        });
                 });
 
             modelBuilder.Entity("SkillSwap.Models.StateUser", b =>
@@ -262,29 +231,6 @@ namespace SkillSwap.Migrations
                         .HasName("PRIMARY");
 
                     b.ToTable("State_users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "La cuenta está completamente operativa y en uso.",
-                            DurationSuspension = 0,
-                            Name = "Activo"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = " La cuenta ha sido revisada y está en un estado de pausa o desactivación temporal. ",
-                            DurationSuspension = 0,
-                            Name = "Inactivo"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "La cuenta ha sido suspendida",
-                            DurationSuspension = 0,
-                            Name = "Suspendido"
-                        });
                 });
 
             modelBuilder.Entity("SkillSwap.Models.User", b =>
@@ -482,13 +428,13 @@ namespace SkillSwap.Migrations
             modelBuilder.Entity("SkillSwap.Models.UserAbility", b =>
                 {
                     b.HasOne("SkillSwap.Models.Ability", "Ability")
-                        .WithMany()
+                        .WithMany("UserAbilities")
                         .HasForeignKey("IdAbility")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SkillSwap.Models.User", "User")
-                        .WithMany()
+                        .WithMany("UserAbilities")
                         .HasForeignKey("IdUser")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -496,6 +442,11 @@ namespace SkillSwap.Migrations
                     b.Navigation("Ability");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SkillSwap.Models.Ability", b =>
+                {
+                    b.Navigation("UserAbilities");
                 });
 
             modelBuilder.Entity("SkillSwap.Models.Qualification", b =>
@@ -524,6 +475,8 @@ namespace SkillSwap.Migrations
                     b.Navigation("RequestIdReceivingUserNavigations");
 
                     b.Navigation("RequestIdRequestingUserNavigations");
+
+                    b.Navigation("UserAbilities");
                 });
 #pragma warning restore 612, 618
         }
