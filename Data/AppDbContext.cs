@@ -13,15 +13,11 @@ public partial class AppDbContext : DbContext
     {
     }
 
-    public virtual DbSet<PrimaryAbility> PrimaryAbilities { get; set; }
-
     public virtual DbSet<Qualification> Qualifications { get; set; }
 
     public virtual DbSet<Request> Requests { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
-
-    public virtual DbSet<SecondaryAbility> SecondaryAbilities { get; set; }
 
     public virtual DbSet<StateRequest> StateRequests { get; set; }
 
@@ -39,20 +35,6 @@ public partial class AppDbContext : DbContext
         modelBuilder
             .UseCollation("utf8_general_ci")
             .HasCharSet("utf8");
-
-        modelBuilder.Entity<PrimaryAbility>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("Primary_abilities");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .HasColumnName("name");
-        });
 
         modelBuilder.Entity<Qualification>(entity =>
         {
@@ -133,29 +115,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
-        });
-
-        modelBuilder.Entity<SecondaryAbility>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("Secondary_abilities");
-
-            entity.HasIndex(e => e.IdPrimaryAbilitie, "id_primary_abilitie");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.IdPrimaryAbilitie)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_primary_abilitie");
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .HasColumnName("name");
-
-            entity.HasOne(d => d.IdPrimaryAbilitieNavigation).WithMany(p => p.SecondaryAbilities)
-                .HasForeignKey(d => d.IdPrimaryAbilitie)
-                .HasConstraintName("Secondary_abilities_ibfk_1");
         });
 
         modelBuilder.Entity<StateRequest>(entity =>
