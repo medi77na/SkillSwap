@@ -30,9 +30,11 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UsersSecondaryAbility> UsersSecondaryAbilities { get; set; }
-    
+    public virtual DbSet<Report> Reports { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder
             .UseCollation("utf8_general_ci")
             .HasCharSet("utf8");
@@ -240,6 +242,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UrlLinkedin)
                 .HasMaxLength(100)
                 .HasColumnName("url_linkedin");
+            entity.Property(e => e.UrlGithub)
+                .HasMaxLength(100)
+                .HasColumnName("url_github");
+            entity.Property(e => e.UrlBehance)
+                .HasMaxLength(100)
+                .HasColumnName("url_behance");
 
             entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdRol)
