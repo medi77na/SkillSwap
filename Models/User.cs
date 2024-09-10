@@ -4,21 +4,25 @@ public partial class User
 {
     public int Id { get; set; }
 
-    public string Email { get; set; } = null!;
+    public required string Email { get; set; } = null!;
 
-    public string Password { get; set; } = null!;
+    public required string Password { get; set; } = null!;
 
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
-    public string? LastName { get; set; }
+    public required string LastName { get; set; }
 
-    public DateOnly? Birthdate { get; set; }
+    public DateOnly Birthdate { get; set; }
 
-    public string? Description { get; set; }
+    public required string Description { get; set; }
 
-    public string? JobTitle { get; set; }
+    public required string JobTitle { get; set; }
 
     public string? UrlLinkedin { get; set; }
+
+    public string? UrlGithub { get; set; }
+
+    public string? UrlBehance { get; set; }
 
     public string? UrlImage { get; set; }
 
@@ -40,5 +44,4 @@ public partial class User
 
     public virtual ICollection<Request> RequestIdRequestingUserNavigations { get; set; } = new List<Request>();
 
-    public virtual ICollection<UsersSecondaryAbility> UsersSecondaryAbilities { get; set; } = new List<UsersSecondaryAbility>();
 }

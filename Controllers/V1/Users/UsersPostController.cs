@@ -37,12 +37,15 @@ public class UsersPostController : ControllerBase
         var user = new User
         {
             Email = userDTO.Email,
+            Password = null,
             Name = userDTO.Name,
             LastName = userDTO.LastName,
             Birthdate = userDTO.Birthdate,
             Description = userDTO.Description,
             JobTitle = userDTO.JobTitle,
             UrlLinkedin = userDTO.UrlLinkedin,
+            UrlGithub = userDTO.UrlGithub,
+            UrlBehance = userDTO.UrlBehance,
             UrlImage = userDTO.UrlImage,
             PhoneNumber = userDTO.PhoneNumber,
             IdState = userDTO.IdState,

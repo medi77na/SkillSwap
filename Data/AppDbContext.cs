@@ -13,43 +13,28 @@ public partial class AppDbContext : DbContext
     {
     }
 
-    public virtual DbSet<PrimaryAbility> PrimaryAbilities { get; set; }
-
     public virtual DbSet<Qualification> Qualifications { get; set; }
 
     public virtual DbSet<Request> Requests { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<SecondaryAbility> SecondaryAbilities { get; set; }
-
     public virtual DbSet<StateRequest> StateRequests { get; set; }
 
     public virtual DbSet<StateUser> StateUsers { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Ability> Abilities { get; set; }
 
-    public virtual DbSet<UsersSecondaryAbility> UsersSecondaryAbilities { get; set; }
-    
+    public virtual DbSet<Report> Reports { get; set; }
+    public virtual DbSet<UserAbility> UserAbilities { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder
             .UseCollation("utf8_general_ci")
             .HasCharSet("utf8");
-
-        modelBuilder.Entity<PrimaryAbility>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("Primary_abilities");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .HasColumnName("name");
-        });
 
         modelBuilder.Entity<Qualification>(entity =>
         {
@@ -132,34 +117,11 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("name");
         });
 
-        modelBuilder.Entity<SecondaryAbility>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("Secondary_abilities");
-
-            entity.HasIndex(e => e.IdPrimaryAbilitie, "id_primary_abilitie");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.IdPrimaryAbilitie)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_primary_abilitie");
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .HasColumnName("name");
-
-            entity.HasOne(d => d.IdPrimaryAbilitieNavigation).WithMany(p => p.SecondaryAbilities)
-                .HasForeignKey(d => d.IdPrimaryAbilitie)
-                .HasConstraintName("Secondary_abilities_ibfk_1");
-        });
-
         modelBuilder.Entity<StateRequest>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("state_requests");
+            entity.ToTable("State_requests");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -240,6 +202,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UrlLinkedin)
                 .HasMaxLength(100)
                 .HasColumnName("url_linkedin");
+            entity.Property(e => e.UrlGithub)
+                .HasMaxLength(100)
+                .HasColumnName("url_github");
+            entity.Property(e => e.UrlBehance)
+                .HasMaxLength(100)
+                .HasColumnName("url_behance");
 
             entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdRol)
@@ -248,35 +216,6 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.IdStateNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdState)
                 .HasConstraintName("Users_ibfk_1");
-        });
-
-        modelBuilder.Entity<UsersSecondaryAbility>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("Users_Secondary_abilities");
-
-            entity.HasIndex(e => e.IdSecondaryAbilitie, "id_secondary_abilitie");
-
-            entity.HasIndex(e => e.IdUser, "id_user1");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.IdSecondaryAbilitie)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_secondary_abilitie");
-            entity.Property(e => e.IdUser)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_user");
-
-            entity.HasOne(d => d.IdSecondaryAbilitieNavigation).WithMany(p => p.UsersSecondaryAbilities)
-                .HasForeignKey(d => d.IdSecondaryAbilitie)
-                .HasConstraintName("Users_Secondary_abilities_ibfk_2");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UsersSecondaryAbilities)
-                .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("Users_Secondary_abilities_ibfk_1");
         });
 
         OnModelCreatingPartial(modelBuilder);
