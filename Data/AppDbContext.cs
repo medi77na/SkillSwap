@@ -26,8 +26,8 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Ability> Abilities { get; set; }
 
-    public virtual DbSet<UsersSecondaryAbility> UsersSecondaryAbilities { get; set; }
     public virtual DbSet<Report> Reports { get; set; }
+    public virtual DbSet<UserAbility> UserAbilities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -121,7 +121,7 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("state_requests");
+            entity.ToTable("State_requests");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")

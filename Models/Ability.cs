@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SkillSwap.Models
 {
@@ -11,7 +13,7 @@ namespace SkillSwap.Models
         [Column("id")]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public int Id { get; set; }
         [Column("category")]
         [MaxLength(50)]
         public string Category { get; set; }
