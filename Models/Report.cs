@@ -11,6 +11,7 @@ namespace SkillSwap.Models
     public class Report
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         [Column("title")]
         [MaxLength(100)]

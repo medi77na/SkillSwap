@@ -28,6 +28,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<StateUser> StateUsers { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Ability> Abilities { get; set; }
 
     public virtual DbSet<UsersSecondaryAbility> UsersSecondaryAbilities { get; set; }
     public virtual DbSet<Report> Reports { get; set; }
@@ -256,35 +257,6 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.IdStateNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdState)
                 .HasConstraintName("Users_ibfk_1");
-        });
-
-        modelBuilder.Entity<UsersSecondaryAbility>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("Users_Secondary_abilities");
-
-            entity.HasIndex(e => e.IdSecondaryAbilitie, "id_secondary_abilitie");
-
-            entity.HasIndex(e => e.IdUser, "id_user1");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.IdSecondaryAbilitie)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_secondary_abilitie");
-            entity.Property(e => e.IdUser)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_user");
-
-            entity.HasOne(d => d.IdSecondaryAbilitieNavigation).WithMany(p => p.UsersSecondaryAbilities)
-                .HasForeignKey(d => d.IdSecondaryAbilitie)
-                .HasConstraintName("Users_Secondary_abilities_ibfk_2");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UsersSecondaryAbilities)
-                .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("Users_Secondary_abilities_ibfk_1");
         });
 
         OnModelCreatingPartial(modelBuilder);
