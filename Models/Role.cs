@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SkillSwap.Models;
 
+/* Model detailing the types of roles available to each user */
 public partial class Role
 {
     public int Id { get; set; }

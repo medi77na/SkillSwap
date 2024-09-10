@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace SkillSwap.Models;
-
+/* Model detailing the state of a request */
 public partial class StateRequest
 {
     public int Id { get; set; }

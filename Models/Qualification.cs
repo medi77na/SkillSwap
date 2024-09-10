@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SkillSwap.Models;
 
+/* Model that is related to User, as it details the ratings that a user has received. */
 public partial class Qualification
 {
     public int Id { get; set; }
@@ -11,7 +12,5 @@ public partial class Qualification
 
     public int? AccumulatorAdition { get; set; }
 
-    public int? IdUser { get; set; }
-
-    public virtual User? IdUserNavigation { get; set; }
+    public User User{ get; set; }
 }

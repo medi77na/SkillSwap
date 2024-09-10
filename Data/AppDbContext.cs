@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SkillSwap.Seeders;
 
 namespace SkillSwap.Models;
-
+/* Class detailing the database conection and all the entities on it, also the conditions of the attributes before to create a registrer*/
 public partial class AppDbContext : DbContext
 {
     public AppDbContext()
@@ -31,6 +32,10 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+            RoleSeeder.Seed(modelBuilder);
+            StateRequestSeeder.Seed(modelBuilder);
+            StateUserSeeder.Seed(modelBuilder);
 
         modelBuilder
             .UseCollation("utf8_general_ci")
@@ -39,8 +44,6 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Qualification>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.HasIndex(e => e.IdUser, "id_user");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -51,13 +54,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Count)
                 .HasColumnType("int(11)")
                 .HasColumnName("count");
-            entity.Property(e => e.IdUser)
-                .HasColumnType("int(11)")
-                .HasColumnName("id_user");
 
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Qualifications)
-                .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("Qualifications_ibfk_1");
+            entity.HasOne(u => u.User)
+                .WithOne(up => up.Qualification)
+                .HasForeignKey<User>(up => up.IdQualification)
+            .HasConstraintName("Qualification_CualificationProfile_FK");
         });
 
         modelBuilder.Entity<Request>(entity =>

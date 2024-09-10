@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SkillSwap.Models;
 
+/* Model detailing a request an user have done */
 public partial class Request
 {
     public int Id { get; set; }

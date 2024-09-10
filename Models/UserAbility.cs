@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+/* Model referencing the category and skills that an user have */
 namespace SkillSwap.Models
 {
     [Table("Users_abilities")]
