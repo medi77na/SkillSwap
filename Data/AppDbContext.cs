@@ -28,7 +28,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Ability> Abilities { get; set; }
 
     public virtual DbSet<Report> Reports { get; set; }
-    public virtual DbSet<UserAbility> UserAbilities { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

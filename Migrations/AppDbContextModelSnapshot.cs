@@ -47,7 +47,7 @@ namespace SkillSwap.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Abilities");
+                    b.ToTable("Abilities", (string)null);
                 });
 
             modelBuilder.Entity("SkillSwap.Models.Qualification", b =>
@@ -70,7 +70,7 @@ namespace SkillSwap.Migrations
                     b.HasKey("Id")
                         .HasName("PRIMARY");
 
-                    b.ToTable("Qualifications");
+                    b.ToTable("Qualifications", (string)null);
                 });
 
             modelBuilder.Entity("SkillSwap.Models.Report", b =>
@@ -105,7 +105,7 @@ namespace SkillSwap.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Reports", (string)null);
                 });
 
             modelBuilder.Entity("SkillSwap.Models.Request", b =>
@@ -148,7 +148,7 @@ namespace SkillSwap.Migrations
 
                     b.HasIndex(new[] { "IdStateRequest" }, "id_state_request");
 
-                    b.ToTable("Requests");
+                    b.ToTable("Requests", (string)null);
                 });
 
             modelBuilder.Entity("SkillSwap.Models.Role", b =>
@@ -173,7 +173,7 @@ namespace SkillSwap.Migrations
                     b.HasKey("Id")
                         .HasName("PRIMARY");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new
@@ -383,7 +383,7 @@ namespace SkillSwap.Migrations
 
                     b.HasIndex(new[] { "IdState" }, "id_state");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("SkillSwap.Models.UserAbility", b =>
@@ -409,7 +409,7 @@ namespace SkillSwap.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("Users_abilities");
+                    b.ToTable("Users_abilities", (string)null);
                 });
 
             modelBuilder.Entity("SkillSwap.Models.Report", b =>

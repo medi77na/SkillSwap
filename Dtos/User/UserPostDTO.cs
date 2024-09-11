@@ -36,6 +36,4 @@ public class UserPostDTO
     public int Count {get;set;}
 
     public int AccumulatorAdition {get;set;}
-
-
 }

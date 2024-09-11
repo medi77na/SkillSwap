@@ -18,5 +18,6 @@ namespace SkillSwap.Models
         [Column("abilities")]
         [MaxLength(255)]
         public string Abilities { get; set; }
+        public User User{ get; set; }
     }
 }
