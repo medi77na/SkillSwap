@@ -28,7 +28,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Ability> Abilities { get; set; }
 
     public virtual DbSet<Report> Reports { get; set; }
-    public virtual DbSet<UserAbility> UserAbilities { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -217,6 +217,11 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.IdStateNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdState)
                 .HasConstraintName("Users_ibfk_1");
+                
+            entity.HasOne(u => u.Ability)
+                .WithOne(up => up.User)
+                .HasForeignKey<User>(up => up.IdAbility)
+            .HasConstraintName("Users_ibfk_3");
         });
 
         OnModelCreatingPartial(modelBuilder);
