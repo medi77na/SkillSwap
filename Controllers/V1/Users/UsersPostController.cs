@@ -69,7 +69,7 @@ public class UsersPostController : ControllerBase
 
     // User Login
     [HttpPost("login")]
-    public IActionResult Login([FromBody] UserLoginPostDTO userLoginPostDTO)
+    public IActionResult Login([FromBody] AuthDTO userLoginPostDTO)
     {
         // Check if the request body or essential fields (Email and Password) are null or empty.
         if (userLoginPostDTO == null || string.IsNullOrEmpty(userLoginPostDTO.Email) || string.IsNullOrEmpty(userLoginPostDTO.Password))
@@ -94,7 +94,11 @@ public class UsersPostController : ControllerBase
         // Generate a JWT token for the authenticated user.
         var token = GenerateJwtToken(user);
 
-        return Ok(new { Token = token });
+        return Ok(new { 
+            Token = token,
+            UserId = user.Id,
+            RoleId = user.IdRol
+        });
     }
 
 
