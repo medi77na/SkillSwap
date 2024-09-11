@@ -1,3 +1,5 @@
+using SkillSwap.Models;
+
 namespace SkillSwap.Dtos.User;
 public class UserPostDTO
 {
@@ -31,5 +33,9 @@ public class UserPostDTO
 
     public int? IdRol { get; set; } = null;
 
-    public int? IdQualification { get; set; } = null;
+    public int Count {get;set;}
+
+    public int AccumulatorAdition {get;set;}
+
+
 }

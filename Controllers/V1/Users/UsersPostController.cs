@@ -34,6 +34,14 @@ public class UsersPostController : ControllerBase
             return BadRequest("Invalid email or password.");
         }
 
+        var qualification = new Qualification{
+            Count = userDTO.Count = 0,
+            AccumulatorAdition = userDTO.AccumulatorAdition = 0
+        };
+
+        _dbContext.Qualifications.Add(qualification);
+        _dbContext.SaveChanges();
+
         // Create the User instance with the DTO properties.
         var user = new User
         {
@@ -51,7 +59,7 @@ public class UsersPostController : ControllerBase
             PhoneNumber = userDTO.PhoneNumber,
             IdState = userDTO.IdState,
             IdRol = userDTO.IdRol,
-            IdQualification = userDTO.IdQualification
+            IdQualification = qualification.Id
         };
 
         // Create PasswordHasher<User> instance 
