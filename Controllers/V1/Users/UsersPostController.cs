@@ -38,7 +38,7 @@ public class UsersPostController : ControllerBase
         var user = new User
         {
             Email = userDTO.Email,
-            Password = null,
+            Password = userDTO.Password,
             Name = userDTO.Name,
             LastName = userDTO.LastName,
             Birthdate = userDTO.Birthdate,
@@ -50,7 +50,8 @@ public class UsersPostController : ControllerBase
             UrlImage = userDTO.UrlImage,
             PhoneNumber = userDTO.PhoneNumber,
             IdState = userDTO.IdState,
-            IdRol = userDTO.IdRol
+            IdRol = userDTO.IdRol,
+            IdQualification = userDTO.IdQualification
         };
 
         // Create PasswordHasher<User> instance 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+/* Model That stores all reports made by one user to another user. */
 namespace SkillSwap.Models
 {
     [Table("Reports")]

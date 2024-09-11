@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SkillSwap.Models;
 
+/* Model detailing if user account is active or inactive */
 public partial class StateUser
 {
     public int Id { get; set; }
