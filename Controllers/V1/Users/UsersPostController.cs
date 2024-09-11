@@ -34,6 +34,8 @@ public class UsersPostController : ControllerBase
             return BadRequest("Invalid email or password.");
         }
 
+        // Create the qualification before create user with DTO properties.
+
         var qualification = new Qualification{
             Count = userDTO.Count = 0,
             AccumulatorAdition = userDTO.AccumulatorAdition = 0
@@ -41,6 +43,16 @@ public class UsersPostController : ControllerBase
 
         _dbContext.Qualifications.Add(qualification);
         _dbContext.SaveChanges();
+
+        // Create the ability before create user with DTO propierties
+        var abilities = new Ability{
+            Category = userDTO.Category,
+            Abilities = userDTO.Abilities
+        };
+
+        _dbContext.Abilities.Add(abilities);
+        _dbContext.SaveChanges();
+
 
         // Create the User instance with the DTO properties.
         var user = new User
@@ -59,8 +71,11 @@ public class UsersPostController : ControllerBase
             PhoneNumber = userDTO.PhoneNumber,
             IdState = userDTO.IdState,
             IdRol = userDTO.IdRol,
-            IdQualification = qualification.Id
+            IdQualification = qualification.Id,
+            IdAbility = abilities.Id
         };
+
+        
 
         // Create PasswordHasher<User> instance 
         var passwordHasher = new PasswordHasher<User>();
