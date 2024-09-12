@@ -38,8 +38,8 @@ public class UsersPostController : ControllerBase
 
         var qualification = new Qualification
         {
-            Count = userDTO.Count = 0,
-            AccumulatorAdition = userDTO.AccumulatorAdition = 0
+            Count = 0,
+            AccumulatorAdition = 0
         };
 
         _dbContext.Qualifications.Add(qualification);
@@ -71,8 +71,8 @@ public class UsersPostController : ControllerBase
             UrlBehance = userDTO.UrlBehance,
             UrlImage = userDTO.UrlImage,
             PhoneNumber = userDTO.PhoneNumber,
-            IdState = userDTO.IdState,
-            IdRol = userDTO.IdRol,
+            IdState = 1,
+            IdRol = 2,
             IdQualification = qualification.Id,
             IdAbility = abilities.Id
         };
