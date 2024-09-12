@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
@@ -27,7 +28,7 @@ public class AuthController : ControllerBase
 
     // User Login
     [HttpPost("login")]
-    public IActionResult Login([FromBody] AuthDTO userLoginPostDTO)
+    public async Task<IActionResult> Login([FromBody] AuthDTO userLoginPostDTO)
     {
         // Check if the request body or essential fields (Email and Password) are null or empty.
         if (userLoginPostDTO == null || string.IsNullOrEmpty(userLoginPostDTO.Email) || string.IsNullOrEmpty(userLoginPostDTO.Password))
@@ -36,7 +37,7 @@ public class AuthController : ControllerBase
         }
 
         // Look for a user in the database with the provided email.
-        var user = _dbContext.Users.FirstOrDefault(u => u.Email == userLoginPostDTO.Email);
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userLoginPostDTO.Email);
         if (user == null)
         {
             return Unauthorized(ManageResponse.ErrorUnauthorized());
