@@ -28,17 +28,7 @@ public class UserPostDTO
     public string? UrlImage { get; set; }
 
     public string? PhoneNumber { get; set; }
-
-    public int Count { get; set; }
-
-    public int AccumulatorAdition { get; set; }
     public string Category { get; set; }
     public string Abilities { get; set; }
-
-    public int? IdState { get; set; } = null;
-
-    public int? IdRol { get; set; } = null;
-
-
 
 }
