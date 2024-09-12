@@ -1,4 +1,7 @@
-﻿namespace SkillSwap.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SkillSwap.Models;
 
 /* Model referring to the user, his personal data, his skills, his role, etc. */
 public partial class User
@@ -34,6 +37,9 @@ public partial class User
     public int? IdRol { get; set; }
 
     public int? IdQualification { get; set; }
+    public int? IdAbility { get; set; }
+
+    public Ability Ability {get;set;}
 
     public Qualification Qualification { get; set; }
 
@@ -41,10 +47,7 @@ public partial class User
 
     public virtual StateUser? IdStateNavigation { get; set; }
 
-
     public virtual ICollection<Request> RequestIdReceivingUserNavigations { get; set; } = new List<Request>();
 
     public virtual ICollection<Request> RequestIdRequestingUserNavigations { get; set; } = new List<Request>();
-
-
 }

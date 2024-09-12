@@ -20,7 +20,7 @@ namespace SkillSwap.Models
         [Column("description")]
         [MaxLength(100)]
         public required string Description { get; set; }
-        [Column("id_usuario")]
+        [Column("id_user")]
         public int IdUser { get; set; }
         [Column("id_user_reported")]
         public int IdReportedUser { get; set; }
