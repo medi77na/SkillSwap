@@ -1,9 +1,5 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
 
@@ -14,15 +10,11 @@ namespace SkillSwap.Controllers.V1;
 public class UsersPostController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
-    private readonly IConfiguration _configuration;
-    private readonly PasswordHasher<User> _passwordHasher;
 
     //Constructor
     public UsersPostController(AppDbContext dbContext, IConfiguration configuration)
     {
         _dbContext = dbContext;
-        _configuration = configuration;
-        _passwordHasher = new PasswordHasher<User>();
     }
 
     // User Creation

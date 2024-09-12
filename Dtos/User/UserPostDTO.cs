@@ -1,5 +1,3 @@
-using SkillSwap.Models;
-
 namespace SkillSwap.Dtos.User;
 public class UserPostDTO
 {
