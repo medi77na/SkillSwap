@@ -29,9 +29,9 @@ public class UsersPostController : ControllerBase
     [HttpPost]
     public IActionResult Register([FromBody] UserPostDTO userDTO)
     {
-        if (userDTO == null || string.IsNullOrEmpty(userDTO.Email) || string.IsNullOrEmpty(userDTO.Password))
+        if (userDTO == null || string.IsNullOrEmpty(userDTO.Email) || string.IsNullOrEmpty(userDTO.Password) || string.IsNullOrEmpty(userDTO.Name)|| string.IsNullOrEmpty(userDTO.LastName)|| string.IsNullOrEmpty(userDTO.Category)|| string.IsNullOrEmpty(userDTO.Abilities))
         {
-            return BadRequest("Invalid email or password.");
+            return BadRequest(ManageResponse.ErrorBadRequest());
         }
 
         // Create the qualification before create user with DTO properties.
@@ -76,6 +76,8 @@ public class UsersPostController : ControllerBase
             IdQualification = qualification.Id,
             IdAbility = abilities.Id
         };
+
+        
 
         // Create PasswordHasher<User> instance
         var passwordHasher = new PasswordHasher<User>();
