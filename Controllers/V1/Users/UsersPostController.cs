@@ -10,16 +10,12 @@ namespace SkillSwap.Controllers.V1;
 public class UsersPostController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
-    private readonly IConfiguration _configuration;
-    private readonly PasswordHasher<User> _passwordHasher;
     private readonly DataValidator _dataValidator;
 
     //Constructor
-    public UsersPostController(AppDbContext dbContext, IConfiguration configuration, DataValidator dataValidator)
+    public UsersPostController(AppDbContext dbContext, DataValidator dataValidator)
     {
         _dbContext = dbContext;
-        _configuration = configuration;
-        _passwordHasher = new PasswordHasher<User>();
         _dataValidator = dataValidator;
     }
 
@@ -34,7 +30,7 @@ public class UsersPostController : ControllerBase
 
         if (_dataValidator.LookForRepeatEmail(userDTO.Email))
         {
-            return BadRequest(ManageResponse.ErrorInternalServerError("Email already exist"));
+            return StatusCode(500, ManageResponse.ErrorInternalServerError("Email already exist"));
         }
 
         // Create the qualification before create user with DTO properties.

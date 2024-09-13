@@ -26,5 +26,4 @@ public static class EntriesValidation
         var lettersOnlyRegex = new Regex(@"^[a-zA-Z\s]+$");
         return lettersOnlyRegex.IsMatch(input);
     }
-
 }
