@@ -9,11 +9,11 @@ using SkillSwap.Dtos.User;
 using SkillSwap.Models;
 
 namespace SkillSwap.Controllers.V1.Auth;
+
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-
     private readonly AppDbContext _dbContext;
     private readonly IConfiguration _configuration;
     private readonly PasswordHasher<User> _passwordHasher;

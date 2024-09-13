@@ -12,7 +12,7 @@ public class UsersPostController : ControllerBase
     private readonly AppDbContext _dbContext;
 
     //Constructor
-    public UsersPostController(AppDbContext dbContext, IConfiguration configuration)
+    public UsersPostController(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -27,7 +27,6 @@ public class UsersPostController : ControllerBase
         }
 
         // Create the qualification before create user with DTO properties.
-
         var qualification = new Qualification
         {
             Count = 0,
