@@ -14,7 +14,7 @@ public static class ManageResponse
         };
     }
 
-    public static object ErrorBadRequest()
+    public static object ErrorBadRequest(string text)
     {
         return new
         {
@@ -22,7 +22,7 @@ public static class ManageResponse
             {
                 statusCode = 400,
                 message = "Bad Request",
-                error = "Some fields are empty"
+                error = text
             }
         };
     }
