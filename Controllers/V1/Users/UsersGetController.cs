@@ -17,10 +17,10 @@ public class UsersGetController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetUsers()
+    public async Task<IActionResult> GetUsers()
     {
         // Obtain the users from the database and project only the desired fields.
-        var users = _dbContext.Users
+        var users = await _dbContext.Users
             .Select(user => new UserGetDTO
             {
                 Id = user.Id,
@@ -33,16 +33,16 @@ public class UsersGetController : ControllerBase
                 UrlImage = user.UrlImage,
                 PhoneNumber = user.PhoneNumber
             })
-            .ToList();
+            .ToListAsync();
 
         return Ok(users);
     }
 
     [HttpGet("WithState")]
-    public IActionResult GetUsersAndState()
+    public async Task<IActionResult> GetUsersAndState()
     {
         // Obtain the users from the database and project only the desired fields.
-        var users = _dbContext.Users
+        var users = await _dbContext.Users
         .Include(user => user.IdStateNavigation)
         .Select(user => new UserGetDTO
         {
@@ -58,7 +58,7 @@ public class UsersGetController : ControllerBase
                 IdState = user.IdState,
                 StateName = user.IdStateNavigation != null ? user.IdStateNavigation.Name : "No state"
             })
-            .ToList();
+            .ToListAsync();
 
         return Ok(users);
     }
