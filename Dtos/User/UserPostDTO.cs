@@ -1,7 +1,7 @@
 namespace SkillSwap.Dtos.User;
 public class UserPostDTO
 {
-    public int Id { get; set; }
+
 
     public string Email { get; set; } = null!;
 

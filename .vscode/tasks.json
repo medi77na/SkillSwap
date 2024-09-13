@@ -27,6 +27,16 @@
 			],
 			"problemMatcher": "$msCompile",
 			"dependsOn": "clean"
+		},
+		{
+			"label": "build",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+			"build",
+			"${workspaceFolder}/SkillSwap.csproj"
+			],
+			"problemMatcher": "$msCompile"
 		}
 	]
 }

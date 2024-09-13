@@ -27,15 +27,15 @@ public static class ManageResponse
         };
     }
 
-    public static object ErrorInternalServerError()
+    public static object ErrorInternalServerError(string text)
     {
         return new
         {
             error = new
             {
                 statusCode = 500,
-                message = "Internal Server Error",
-                error = "An error occurred"
+                message = text,
+                error = "Internal Server Error"
             }
         };
     }
