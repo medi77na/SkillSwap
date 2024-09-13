@@ -1,9 +1,5 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
 
@@ -29,7 +25,7 @@ public class UsersPostController : ControllerBase
 
     // User Creation
     [HttpPost]
-    public IActionResult Register([FromBody] UserPostDTO userDTO)
+    public async Task<IActionResult> Register([FromBody] UserPostDTO userDTO)
     {
         if (userDTO == null || string.IsNullOrEmpty(userDTO.Email) || string.IsNullOrEmpty(userDTO.Password) || string.IsNullOrEmpty(userDTO.Name)|| string.IsNullOrEmpty(userDTO.LastName)|| string.IsNullOrEmpty(userDTO.Category)|| string.IsNullOrEmpty(userDTO.Abilities))
         {
@@ -49,8 +45,8 @@ public class UsersPostController : ControllerBase
             AccumulatorAdition = 0
         };
 
-        _dbContext.Qualifications.Add(qualification);
-        _dbContext.SaveChanges();
+        await _dbContext.Qualifications.AddAsync(qualification);
+        await _dbContext.SaveChangesAsync();
 
         // Create the ability before create user with DTO propierties
         var abilities = new Ability
@@ -59,8 +55,8 @@ public class UsersPostController : ControllerBase
             Abilities = userDTO.Abilities
         };
 
-        _dbContext.Abilities.Add(abilities);
-        _dbContext.SaveChanges();
+        await _dbContext.Abilities.AddAsync(abilities);
+        await _dbContext.SaveChangesAsync();
 
 
         // Create the User instance with the DTO properties.
@@ -93,8 +89,8 @@ public class UsersPostController : ControllerBase
         user.Password = passwordHasher.HashPassword(user, userDTO.Password);
 
         // Save in database
-        _dbContext.Users.Add(user);
-        _dbContext.SaveChanges();
+        await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
 
         return Ok(ManageResponse.Successfull("User registered successfully."));
     }
