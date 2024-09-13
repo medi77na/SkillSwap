@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
         // Check if the request body or essential fields (Email and Password) are null or empty.
         if (userLoginPostDTO == null || string.IsNullOrEmpty(userLoginPostDTO.Email) || string.IsNullOrEmpty(userLoginPostDTO.Password))
         {
-            return BadRequest(ManageResponse.ErrorBadRequest());
+            return BadRequest(ManageResponse.ErrorBadRequest("fields are empty."));
         }
 
         // Look for a user in the database with the provided email.
