@@ -10,20 +10,31 @@ namespace SkillSwap.Controllers.V1;
 public class UsersPostController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
+    private readonly IConfiguration _configuration;
+    private readonly PasswordHasher<User> _passwordHasher;
+    private readonly DataValidator _dataValidator;
 
     //Constructor
-    public UsersPostController(AppDbContext dbContext)
+    public UsersPostController(AppDbContext dbContext, IConfiguration configuration, DataValidator dataValidator)
     {
         _dbContext = dbContext;
+        _configuration = configuration;
+        _passwordHasher = new PasswordHasher<User>();
+        _dataValidator = dataValidator;
     }
 
     // User Creation
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] UserPostDTO userDTO)
     {
-        if (userDTO == null || string.IsNullOrEmpty(userDTO.Email) || string.IsNullOrEmpty(userDTO.Password))
+        if (userDTO == null || string.IsNullOrEmpty(userDTO.Email) || string.IsNullOrEmpty(userDTO.Password) || string.IsNullOrEmpty(userDTO.Name)|| string.IsNullOrEmpty(userDTO.LastName)|| string.IsNullOrEmpty(userDTO.Category)|| string.IsNullOrEmpty(userDTO.Abilities))
         {
-            return BadRequest("Invalid email or password.");
+            return BadRequest(ManageResponse.ErrorBadRequest());
+        }
+
+        if (_dataValidator.LookForRepeatEmail(userDTO.Email))
+        {
+            return BadRequest(ManageResponse.ErrorInternalServerError("Email already exist"));
         }
 
         // Create the qualification before create user with DTO properties.
@@ -67,6 +78,8 @@ public class UsersPostController : ControllerBase
             IdQualification = qualification.Id,
             IdAbility = abilities.Id
         };
+
+        
 
         // Create PasswordHasher<User> instance
         var passwordHasher = new PasswordHasher<User>();

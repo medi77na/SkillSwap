@@ -12,6 +12,7 @@ Env.Load();
 
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllers();
+builder.Services.AddTransient<DataValidator>();
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
