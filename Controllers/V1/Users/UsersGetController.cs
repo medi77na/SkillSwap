@@ -16,6 +16,12 @@ public class UsersGetController : ControllerBase
         _dbContext = dbContext;
     }
 
+    /// <summary>
+    /// GENERAL INFORMATION
+    /// </summary>
+    /// <remarks>
+    /// Obtain general information from system users
+    /// </remarks>
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
@@ -24,39 +30,18 @@ public class UsersGetController : ControllerBase
             .Select(user => new UserGetDTO
             {
                 Id = user.Id,
-                Email = user.Email,
                 Name = user.Name,
                 LastName = user.LastName,
-                Description = user.Description,
                 JobTitle = user.JobTitle,
-                UrlLinkedin = user.UrlLinkedin,
-                UrlImage = user.UrlImage,
-                PhoneNumber = user.PhoneNumber
-            })
-            .ToListAsync();
-
-        return Ok(users);
-    }
-
-    [HttpGet("WithState")]
-    public async Task<IActionResult> GetUsersAndState()
-    {
-        // Obtain the users from the database and project only the desired fields.
-        var users = await _dbContext.Users
-        .Include(user => user.IdStateNavigation)
-        .Select(user => new UserGetDTO
-        {
-                Id = user.Id,
+                Description = user.Description,
+                Birthdate = user.Birthdate,
                 Email = user.Email,
-                Name = user.Name,
-                LastName = user.LastName,
-                Description = user.Description,
-                JobTitle = user.JobTitle,
-                UrlLinkedin = user.UrlLinkedin,
-                UrlImage = user.UrlImage,
                 PhoneNumber = user.PhoneNumber,
-                IdState = user.IdState,
-                StateName = user.IdStateNavigation != null ? user.IdStateNavigation.Name : "No state"
+                AbilityCategory = user.Ability != null ? user.Ability.Category : "No abilities",
+                UrlLinkedin = user.UrlLinkedin,
+                UrlGithub = user.UrlGithub,
+                UrlBehance = user.UrlBehance,
+                RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role" 
             })
             .ToListAsync();
 

@@ -37,6 +37,7 @@ public partial class User
     public int? IdRol { get; set; }
 
     public int? IdQualification { get; set; }
+    
     public int? IdAbility { get; set; }
 
     public Ability Ability {get;set;}
