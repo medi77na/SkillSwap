@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillSwap.Dtos.User;
@@ -20,7 +21,7 @@ public class UsersGetController : ControllerBase
     /// GENERAL INFORMATION
     /// </summary>
     /// <remarks>
-    /// Obtain general information from system users
+    /// Obtain general information from all system users
     /// </remarks>
     [HttpGet]
     public async Task<IActionResult> GetUsers()
@@ -41,10 +42,81 @@ public class UsersGetController : ControllerBase
                 UrlLinkedin = user.UrlLinkedin,
                 UrlGithub = user.UrlGithub,
                 UrlBehance = user.UrlBehance,
-                RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role" 
+                RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
             })
             .ToListAsync();
-
         return Ok(users);
     }
+
+    /// <summary>
+    /// Get user by Id
+    /// </summary>
+    /// <remarks>
+    /// Get a specific user by their id
+    /// </remarks>
+    [HttpGet("/{id}")]
+    public async Task<IActionResult> GetUserById(int id)
+    {
+        var user = await _dbContext.Users
+            .Include(u => u.Ability)
+            .Include(u => u.IdRolNavigation)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorNotFound());
+        }
+
+        var getUser = new UserGetDTO
+        {
+            Id = user.Id,
+            Name = user.Name,
+            LastName = user.LastName,
+            JobTitle = user.JobTitle,
+            Description = user.Description,
+            Birthdate = user.Birthdate,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            AbilityCategory = user.Ability != null ? user.Ability.Category : "No abilities",
+            UrlLinkedin = user.UrlLinkedin,
+            UrlGithub = user.UrlGithub,
+            UrlBehance = user.UrlBehance,
+            RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
+        };
+
+        return Ok(getUser);
+    }
+
+    /// <summary>
+    /// Get specific ability
+    /// </summary>
+    /// <remarks>
+    /// Get abilities for a user by his id
+    /// </remarks>
+    [HttpGet("/skills/{id}")]
+    public async Task<IActionResult> GetSkillsByUser(int id)
+    {
+        var user = await _dbContext.Users
+           .Include(u => u.Ability)
+           .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorNotFound());
+        }
+
+        var getUser = new UserAbilityDTO
+        {
+            Id = user.Id,
+            AbilityCategory = user.Ability != null ? user.Ability.Category : "No Categoties",
+            AbilityName = user.Ability != null ? user.Ability.Abilities : "No abilities"
+        };
+
+        return Ok(getUser);
+    }
+
+
+
+
+
 }

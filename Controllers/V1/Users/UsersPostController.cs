@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
-using SkillSwap.Services;
 using SkillSwap.Validations;
 namespace SkillSwap.Controllers.V1;
 
@@ -69,8 +68,6 @@ public class UsersPostController : ControllerBase
             IdQualification = qualification.Id,
             IdAbility = abilities.Id
         };
-
-
 
         // Create PasswordHasher<User> instance
         var passwordHasher = new PasswordHasher<User>();
