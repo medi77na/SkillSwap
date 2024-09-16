@@ -17,6 +17,7 @@ public class UsersGetController : ControllerBase
         _dbContext = dbContext;
     }
 
+
     /// <summary>
     /// GENERAL INFORMATION
     /// </summary>
@@ -48,6 +49,7 @@ public class UsersGetController : ControllerBase
         return Ok(users);
     }
 
+
     /// <summary>
     /// Get user by Id
     /// </summary>
@@ -58,9 +60,9 @@ public class UsersGetController : ControllerBase
     public async Task<IActionResult> GetUserById(int id)
     {
         var user = await _dbContext.Users
-            .Include(u => u.Ability)
-            .Include(u => u.IdRolNavigation)
-            .FirstOrDefaultAsync(u => u.Id == id);
+        .Include(u => u.Ability)
+        .Include(u => u.IdRolNavigation)
+        .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null)
         {
@@ -83,21 +85,21 @@ public class UsersGetController : ControllerBase
             UrlBehance = user.UrlBehance,
             RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
         };
-
         return Ok(getUser);
     }
 
+
     /// <summary>
-    /// Get specific ability
+    /// Get state from user
     /// </summary>
     /// <remarks>
-    /// Get abilities for a user by his id
+    /// obtain the user's current status
     /// </remarks>
-    [HttpGet("/skills/{id}")]
-    public async Task<IActionResult> GetSkillsByUser(int id)
+    [HttpGet("/state/{id}")]
+    public async Task<IActionResult> GetStateFromUser(int id)
     {
         var user = await _dbContext.Users
-           .Include(u => u.Ability)
+           .Include(u => u.IdStateNavigation)
            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null)
@@ -105,11 +107,10 @@ public class UsersGetController : ControllerBase
             return StatusCode(404, ManageResponse.ErrorNotFound());
         }
 
-        var getUser = new UserAbilityDTO
+        var getUser = new UserStateDTO
         {
             Id = user.Id,
-            AbilityCategory = user.Ability != null ? user.Ability.Category : "No Categoties",
-            AbilityName = user.Ability != null ? user.Ability.Abilities : "No abilities"
+            StateName = user.IdState != null ? user.IdStateNavigation.Name : "No state"
         };
 
         return Ok(getUser);

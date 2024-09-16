@@ -41,9 +41,9 @@ public partial class User
     
     public int? IdAbility { get; set; }
 
-    public Ability Ability {get;set;}
+    public Ability? Ability {get;set;}
 
-    public Qualification Qualification { get; set; }
+    public Qualification? Qualification { get; set; }
 
     public virtual Role? IdRolNavigation { get; set; }
 
