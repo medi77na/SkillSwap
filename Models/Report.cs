@@ -24,6 +24,10 @@ namespace SkillSwap.Models
         [Column("date_report")]
         public required DateOnly DateReport { get; set; }
 
+        [Column("action_taken")]
+        [MaxLength(100)]
+        public required string ActionTaken {get; set;}
+
         [Column("id_state_report")]
         public required int IdState {get;set;}
 
@@ -33,7 +37,7 @@ namespace SkillSwap.Models
         public int IdReportedUser { get; set; }
 
         [ForeignKey("IdState")]
-        public StateRequest StateRequest {get; set;} 
+        public StateReport StateReport {get; set;} 
 
         [ForeignKey("IdUser")]
         public User User { get; set; }
