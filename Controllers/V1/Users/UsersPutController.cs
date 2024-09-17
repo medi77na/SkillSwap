@@ -33,6 +33,31 @@ public class UsersPutController : ControllerBase
 
         await _dbContext.SaveChangesAsync();
 
-        return Ok("User updated.");
+        return Ok(new
+        {
+            message = "User has been updated"
+        });
     }
+
+
+    [HttpPut("Admin/{id}")]
+    public async Task<IActionResult> PutByUserFromAdmin(int id, UserPutAdminDTO userDTO)
+    {
+        var userFinded = await _dbContext.Users.FindAsync(id);
+
+        if (userFinded == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorNotFound());
+        }
+
+        _mapper.Map(userDTO, userFinded);
+
+        await _dbContext.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "User has been updated"
+        });
+    }
+
 }

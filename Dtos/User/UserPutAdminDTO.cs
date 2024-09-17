@@ -1,5 +1,5 @@
 namespace SkillSwap.Dtos.User;
-public class UserPostDTO
+public class UserPutAdminDTO
 {
     public string Email { get; set; } = null!;
 
@@ -26,6 +26,11 @@ public class UserPostDTO
     public string? PhoneNumber { get; set; }
 
     public string? Category { get; set; }
-    
+
     public string? Abilities { get; set; }
+
+    public int? IdState { get; set; }
+
+    public int? IdRol { get; set; }
+    
 }
