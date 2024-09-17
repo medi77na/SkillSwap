@@ -35,8 +35,27 @@ namespace SkillSwap.Controllers.V1.Admin
                     IdReportedUser = report.IdReportedUser
                 })
                 .ToListAsync();
+            
+            var reportDtos = await ReportManager.ReportProjection(_dbContext, reports);
+            return Ok(reportDtos);
+        }
 
-                var reportDtos = await ReportManager.ReportProjection(_dbContext, reports);
+        [HttpGet("Reports/{id}")]
+        public async Task<IActionResult> GetReportById(int id)
+        {
+            // Obtain the users from the database and project only the desired fields.
+            var reports = await _dbContext.Reports.Where(r => r.Id == id)
+            .Select(report => new Report
+            {
+                Id = report.Id,
+                TitleReport = report.TitleReport,
+                Description = report.Description,
+                IdUser = report.IdUser,
+                IdReportedUser = report.IdReportedUser
+            })
+            .ToListAsync();
+
+            var reportDtos = await ReportManager.ReportProjection(_dbContext, reports);
             return Ok(reportDtos);
         }
     }
