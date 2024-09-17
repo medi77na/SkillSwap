@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -26,7 +23,7 @@ namespace SkillSwap.Models
         public int IdReportedUser { get; set; }
 
         [ForeignKey("IdUser")]
-        public User User { get; set; }
+        public User? User { get; set; }
 
         [ForeignKey("IdReportedUser")]
         public User? UserReported { get; set; }

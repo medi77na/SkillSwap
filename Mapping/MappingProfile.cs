@@ -1,4 +1,5 @@
 using AutoMapper;
+using SkillSwap.Dtos.Report;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
 
@@ -9,6 +10,6 @@ public class MappingProfile : Profile
     {
         CreateMap<UserPostDTO, User>();
         CreateMap<UserPutAdminDTO, User>();
+        CreateMap<ReportPostDTO, Report>();
     }
-
 }

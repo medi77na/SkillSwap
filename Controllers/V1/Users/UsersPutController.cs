@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
+using SkillSwap.Validations;
 
 namespace SkillSwap.Controllers.V1.Users;
 [ApiController]
@@ -22,11 +23,12 @@ public class UsersPutController : ControllerBase
     [HttpPut("/{id}")]
     public async Task<IActionResult> PutByUser(int id, UserPostDTO userDTO)
     {
-        var userFinded = await _dbContext.Users.FindAsync(id);
 
-        if (userFinded == null)
+        var userFinded = await UserValidation.GeneralValidationAsync(_dbContext, userDTO);
+
+        if (userFinded != "correct user")
         {
-            return StatusCode(404, ManageResponse.ErrorNotFound());
+            return StatusCode(400, ManageResponse.ErrorBadRequest(userFinded));
         }
 
         _mapper.Map(userDTO, userFinded);
