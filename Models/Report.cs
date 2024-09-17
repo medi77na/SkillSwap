@@ -13,7 +13,7 @@ namespace SkillSwap.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public int Id { get; set; }
         [Column("title")]
         [MaxLength(100)]
         public required string TitleReport { get; set; }
