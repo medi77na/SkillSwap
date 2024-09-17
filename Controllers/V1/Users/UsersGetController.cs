@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +57,7 @@ public class UsersGetController : ControllerBase
     /// <remarks>
     /// Get a specific user by their id
     /// </remarks>
+    [Authorize]
     [HttpGet("/{id}")]
     public async Task<IActionResult> GetUserById(int id)
     {
@@ -115,9 +117,4 @@ public class UsersGetController : ControllerBase
 
         return Ok(getUser);
     }
-
-
-
-
-
 }

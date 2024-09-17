@@ -49,12 +49,6 @@ public static class UserValidation
             return "email already registered";
         }
 
-        //Check if birthday is not null
-        if (!DataValidator.ValidateContainNotNull(userDTO.Birthdate))
-        {
-            return BirthdateNotNull;
-        }
-
         //Check if category is not null
         if (!DataValidator.ValidateContainNotNull(userDTO.Category))
         {

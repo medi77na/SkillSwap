@@ -52,9 +52,4 @@ public partial class User
     public virtual ICollection<Request> RequestIdReceivingUserNavigations { get; set; } = new List<Request>();
 
     public virtual ICollection<Request> RequestIdRequestingUserNavigations { get; set; } = new List<Request>();
-
-    public static implicit operator User(UserGetDTO v)
-    {
-        throw new NotImplementedException();
-    }
 }
