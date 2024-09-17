@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkillSwap.Models;
 
@@ -11,9 +12,11 @@ using SkillSwap.Models;
 namespace SkillSwap.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240917114800_SeAgregaAlaTablaReportDateReport_y_relacionConLaTablaStateRequest")]
+    partial class SeAgregaAlaTablaReportDateReport_y_relacionConLaTablaStateRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,12 +84,6 @@ namespace SkillSwap.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ActionTaken")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("action_taken");
-
                     b.Property<DateOnly>("DateReport")
                         .HasColumnType("date")
                         .HasColumnName("date_report");
@@ -102,7 +99,7 @@ namespace SkillSwap.Migrations
                         .HasColumnName("id_user_reported");
 
                     b.Property<int>("IdState")
-                        .HasColumnType("int")
+                        .HasColumnType("int(11)")
                         .HasColumnName("id_state_report");
 
                     b.Property<int>("IdUser")
@@ -205,49 +202,6 @@ namespace SkillSwap.Migrations
                             Id = 2,
                             Description = "Un profesional que busca oportunidades laborales o empleadores que buscan candidatos.",
                             Name = "Usuario"
-                        });
-                });
-
-            modelBuilder.Entity("SkillSwap.Models.StateReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("State_reports");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "El reporte no ha sido solucionado y está esperando revisión o respuesta por parte del administrador.",
-                            Name = "Pendiente"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "El reporte esta siendo revisado por el administrador.",
-                            Name = "En proceso"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "El reporte ha sido revisado y aceptado por el administrador.",
-                            Name = "Resuelto"
                         });
                 });
 
@@ -461,7 +415,7 @@ namespace SkillSwap.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SkillSwap.Models.StateReport", "StateReport")
+                    b.HasOne("SkillSwap.Models.StateRequest", "StateRequest")
                         .WithMany()
                         .HasForeignKey("IdState")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -473,7 +427,7 @@ namespace SkillSwap.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("StateReport");
+                    b.Navigation("StateRequest");
 
                     b.Navigation("User");
 
