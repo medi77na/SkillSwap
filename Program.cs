@@ -13,9 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 Env.Load();
 
+
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllers();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add Swagger services and configure it to include XML comments
 builder.Services.AddSwaggerGen(c =>
