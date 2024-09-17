@@ -43,6 +43,6 @@ namespace SkillSwap.Models
         public User User { get; set; }
 
         [ForeignKey("IdReportedUser")]
-        public User? UserReported { get; set; }
+        public User UserReported { get; set; }
     }
 }
