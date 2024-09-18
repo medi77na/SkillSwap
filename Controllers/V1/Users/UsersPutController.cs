@@ -23,6 +23,10 @@ public class UsersPutController : ControllerBase
     [HttpPut("/{id}")]
     public async Task<IActionResult> PutByUser(int id, UserPostDTO userDTO)
     {
+        if (!await CheckExist(id))
+        {
+            return StatusCode(400, ManageResponse.ErrorBadRequest("User not found."));
+        }
 
         var userFinded = await UserValidation.GeneralValidationAsync(_dbContext, userDTO);
 
@@ -62,4 +66,9 @@ public class UsersPutController : ControllerBase
         });
     }
 
+    public async Task<bool> CheckExist(int id)
+    {
+        var response = await _dbContext.Users.FindAsync(id);
+        return response != null ? true : false;
+    }
 }

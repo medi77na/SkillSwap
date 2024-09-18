@@ -41,6 +41,6 @@ public class ReportsPostController : ControllerBase
         await _dbContext.Reports.AddAsync(report);
         await _dbContext.SaveChangesAsync();
 
-        return Ok(ManageResponse.Successfull("User registered successfully."));
+        return Ok(ManageResponse.Successfull("Report is created successfully."));
     }
 }
