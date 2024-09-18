@@ -33,21 +33,21 @@ public class AuthController : ControllerBase
         // Check if the request body or essential fields (Email and Password) are null or empty.
         if (userLoginPostDTO == null || string.IsNullOrEmpty(userLoginPostDTO.Email) || string.IsNullOrEmpty(userLoginPostDTO.Password))
         {
-            return BadRequest(ManageResponse.ErrorBadRequest("fields are empty."));
+            return StatusCode(400,ManageResponse.ErrorBadRequest("fields are empty."));
         }
 
         // Look for a user in the database with the provided email.
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userLoginPostDTO.Email);
         if (user == null)
         {
-            return Unauthorized(ManageResponse.ErrorUnauthorized());
+            return StatusCode(401,ManageResponse.ErrorUnauthorized());
         }
 
         // Verify the password using the password hasher.
         var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, userLoginPostDTO.Password);
         if (passwordVerificationResult == PasswordVerificationResult.Failed)
         {
-            return Unauthorized("Invalid email or password.");
+            return StatusCode(404, ManageResponse.ErrorBadRequest("Incorrect Password"));
         }
 
         // Generate a JWT token for the authenticated user.

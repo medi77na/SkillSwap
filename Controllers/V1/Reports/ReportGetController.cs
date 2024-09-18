@@ -40,7 +40,7 @@ namespace SkillSwap.Controllers.V1.Admin
                 .ToListAsync();
             
             var reportDtos = await ReportManager.ReportProjection(_dbContext, reports);
-            return Ok(reportDtos);
+            return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada",reportDtos) );
         }
 
         [HttpGet("Reports/{id}")]
@@ -62,7 +62,7 @@ namespace SkillSwap.Controllers.V1.Admin
             .ToListAsync();
 
             var reportDtos = await ReportManager.ReportProjection(_dbContext, reports);
-            return Ok(reportDtos);
+            return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada",reportDtos) );
         }
     }
 }

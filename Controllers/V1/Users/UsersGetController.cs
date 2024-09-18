@@ -47,7 +47,7 @@ public class UsersGetController : ControllerBase
                 RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
             })
             .ToListAsync();
-        return Ok(users);
+         return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada", users));
     }
 
 
@@ -87,7 +87,7 @@ public class UsersGetController : ControllerBase
             UrlBehance = user.UrlBehance,
             RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
         };
-        return Ok(getUser);
+        return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
     }
 
 
@@ -115,7 +115,7 @@ public class UsersGetController : ControllerBase
             StateName = user.IdState != null ? user.IdStateNavigation.Name : "No state"
         };
 
-        return Ok(getUser);
+        return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
     }
 
     private async Task<bool> CheckExist(int id)

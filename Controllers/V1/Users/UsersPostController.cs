@@ -24,6 +24,7 @@ public class UsersPostController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] UserPostDTO userDTO)
     {
+
         var response = await UserValidation.GeneralValidationAsync(_dbContext, userDTO);
 
         if (response != "correct user")
@@ -65,12 +66,12 @@ public class UsersPostController : ControllerBase
 
         // Hash the password and assign it to the user's Password property
         user.Password = passwordHasher.HashPassword(user, userDTO.Password);
-        
+
 
         // Save in database
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
 
-        return Ok(ManageResponse.Successfull("User registered successfully."));
+        return StatusCode(200, ManageResponse.Successfull("User registered successfully."));
     }
 }

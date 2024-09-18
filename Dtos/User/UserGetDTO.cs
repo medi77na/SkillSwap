@@ -13,7 +13,7 @@ public class UserGetDTO
 
     public DateOnly Birthdate { get; set; }
 
-    public required string Email { get; set; } = null!;
+    public required string? Email { get; set; }
 
     public string? PhoneNumber { get; set; }
 
