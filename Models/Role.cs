@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SkillSwap.Models;
+﻿namespace SkillSwap.Models;
 
 /* Model detailing the types of roles available to each user */
 public partial class Role

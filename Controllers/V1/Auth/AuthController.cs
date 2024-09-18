@@ -51,7 +51,7 @@ public class AuthController : ControllerBase
         }
 
         // Generate a JWT token for the authenticated user.
-        var token = GenerateJwtToken(user);
+        var token = GenerateJwtToken();
 
         return Ok(new
         {
@@ -61,13 +61,13 @@ public class AuthController : ControllerBase
                 id = user.Id,
                 role = user.IdRol,
                 email = user.Email,
-                token = token
+                token
             }
         });
     }
 
     // Generate JWT token for authenticated users
-    private string GenerateJwtToken(User user)
+    private string GenerateJwtToken()
     {
         // Create a security key using the secret key from configuration.
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT_KEY"]));
@@ -78,9 +78,8 @@ public class AuthController : ControllerBase
         // Define the claims to include in the token, such as the user's email and a unique identifier (JTI).
         var claims = new[]
         {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-    };
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
 
         // Build the JWT token with the defined issuer, audience, claims, expiration time, and signing credentials.
         var token = new JwtSecurityToken(

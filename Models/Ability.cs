@@ -14,10 +14,10 @@ namespace SkillSwap.Models
         public int Id { get; set; }
         [Column("category")]
         [MaxLength(50)]
-        public string Category { get; set; }
+        public string? Category { get; set; }
         [Column("abilities")]
         [MaxLength(255)]
-        public string Abilities { get; set; }
-        public User User{ get; set; }
+        public string? Abilities { get; set; }
+        public User? User{ get; set; }
     }
 }

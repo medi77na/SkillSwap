@@ -6,23 +6,13 @@ using SkillSwap.Services;
 namespace SkillSwap.Validations;
 public static class UserValidation
 {
-
-    public static string IncorrectEmail { get; set; } = "incorrect email";
-    public static string IncorrectPassword { get; set; } = "incorrect password";
-    public static string IncorrectName { get; set; } = "incorrect name";
-    public static string IncorrectLastName { get; set; } = "incorrect last name";
-    public static string EmailAlreadyRegistered { get; set; } = "email already registered";
-    public static string BirthdateNotNull { get; set; } = "birthday is required";
-    public static string CategoryNotNull { get; set; } = "category is required";
-    public static string AbilitiesNotNull { get; set; } = "abilities is required";
-
-    public static async Task<string> GeneralValidationAsync(AppDbContext _dbContext,[FromBody] UserPostDTO userDTO)
+    public static async Task<string> GeneralValidationAsync(AppDbContext _dbContext, [FromBody] UserPostDTO userDTO)
     {
 
         // Check if email is valid
         if (!DataValidator.ValidateEmail(userDTO.Email))
         {
-            return IncorrectEmail;
+            return "incorrect email";
         }
 
         //Check if password is valid
@@ -52,19 +42,19 @@ public static class UserValidation
         //Check if birthday is not null
         if (!DataValidator.ValidateContainNotNull(userDTO.Birthdate))
         {
-            return BirthdateNotNull;
+            return "birthday is required";
         }
 
         //Check if category is not null
         if (!DataValidator.ValidateContainNotNull(userDTO.Category))
         {
-            return CategoryNotNull;
+            return "category is required";
         }
 
         //Check if skills is not null
         if (!DataValidator.ValidateContainNotNull(userDTO.Abilities))
         {
-            return AbilitiesNotNull;
+            return "abilities is required";
         }
 
         return "correct user";
