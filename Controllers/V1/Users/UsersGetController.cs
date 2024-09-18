@@ -117,4 +117,11 @@ public class UsersGetController : ControllerBase
 
         return Ok(getUser);
     }
+
+    private async Task<bool> CheckExist(int id)
+    {
+        var response = await _dbContext.Users.FindAsync(id);
+        return response != null ? true : false;
+    }
+
 }
