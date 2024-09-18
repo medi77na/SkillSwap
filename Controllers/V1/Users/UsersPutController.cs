@@ -20,7 +20,7 @@ public class UsersPutController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPut("/{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> PutByUser(int id, UserPostDTO userDTO)
     {
         if (!await CheckExist(id))
@@ -66,7 +66,7 @@ public class UsersPutController : ControllerBase
         });
     }
 
-    public async Task<bool> CheckExist(int id)
+    private async Task<bool> CheckExist(int id)
     {
         var response = await _dbContext.Users.FindAsync(id);
         return response != null ? true : false;
