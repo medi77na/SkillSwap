@@ -36,6 +36,7 @@ public partial class AppDbContext : DbContext
             RoleSeeder.Seed(modelBuilder);
             StateRequestSeeder.Seed(modelBuilder);
             StateUserSeeder.Seed(modelBuilder);
+            StateReportSeeder.Seed(modelBuilder);
 
         modelBuilder
             .UseCollation("utf8_general_ci")

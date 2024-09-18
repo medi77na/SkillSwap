@@ -10,7 +10,6 @@ namespace SkillSwap.Controllers.V1.Reports;
 [Route("api/[controller]")]
 public class ReportsPostController : ControllerBase
 {
-
     private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
 
@@ -27,13 +26,16 @@ public class ReportsPostController : ControllerBase
 
         var response = await ReportValidation.GeneralValidationAsync(reportDTO);
 
-        if (response != "correct report")
+        if (response != "success")
         {
             return StatusCode(400, ManageResponse.ErrorBadRequest(response));
         }
 
         // Map the userDTO to the User model
         var report = _mapper.Map<Report>(reportDTO);
+
+        report.DateReport = DateOnly.FromDateTime(DateTime.Now);
+        report.IdState = 1;
 
         // Save in database
         await _dbContext.Reports.AddAsync(report);
