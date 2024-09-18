@@ -31,6 +31,9 @@ namespace SkillSwap.Controllers.V1.Admin
                     Id = report.Id,
                     TitleReport = report.TitleReport,
                     Description = report.Description,
+                    DateReport = report.DateReport,
+                    ActionTaken = report.ActionTaken,
+                    IdState = report.IdState,
                     IdUser = report.IdUser,
                     IdReportedUser = report.IdReportedUser
                 })
@@ -50,6 +53,9 @@ namespace SkillSwap.Controllers.V1.Admin
                 Id = report.Id,
                 TitleReport = report.TitleReport,
                 Description = report.Description,
+                DateReport = report.DateReport,
+                ActionTaken = report.ActionTaken,
+                IdState = report.IdState,
                 IdUser = report.IdUser,
                 IdReportedUser = report.IdReportedUser
             })
