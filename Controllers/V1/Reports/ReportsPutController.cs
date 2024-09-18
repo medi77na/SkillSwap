@@ -24,7 +24,7 @@ namespace SkillSwap.Controllers.V1.Reports
         {
             if (idReport == default(int) || action == null || idUserReport == default(int))
             {
-                return BadRequest("Error, ninguno de los datos puede estar vacío.");
+                return StatusCode(400, ManageResponse.ErrorBadRequest("Error, ninguno de los datos puede estar vacío."));
             }
 
             // Search for the report in the database, including related entities
@@ -39,19 +39,19 @@ namespace SkillSwap.Controllers.V1.Reports
             // If the report is not found, return a 404 Not Found response
             if (report == null)
             {
-                return NotFound("No se encontró el usuario para resolver el reporte.");
+                return StatusCode(400,ManageResponse.ErrorNotFound());
             }
 
             // Ensure the user is not null before accessing their properties
             if (report.User == null)
             {
-                return NotFound("El usuario reportador no existe.");
+                return StatusCode(400,ManageResponse.ErrorNotFound());
             }
 
             // Ensure the UserReported is not null before accessing their properties
             if (report.UserReported == null)
             {
-                return NotFound("El usuario reportado no existe.");
+                return StatusCode(400,ManageResponse.ErrorNotFound());
             }
 
 
@@ -76,26 +76,21 @@ namespace SkillSwap.Controllers.V1.Reports
             }
             else
             {
-                return BadRequest("Acción no reconocida.");
+                return StatusCode(400, ManageResponse.ErrorBadRequest("Acción no reconocida."));
             }
 
             // Save changes to the database
             await _dbContext.SaveChangesAsync();
 
-            // Return a success response with the updated report information
-            return Ok(new
-            {
-                message = "Success",
-                data = new
-                {
-                    Id_del_reporte = report.Id,
+            var response = new{  Id_del_reporte = report.Id,
                     Estado = report.StateReport.Name,
                     AccionTomada = report.ActionTaken,
                     Id_del_usuario_reportado = report.IdReportedUser,
                     nombre = report.User.Name,
-                    estado_de_Cuenta_del_usuario_reportado = report.UserReported.IdStateNavigation.Name
-                }
-            });
+                    estado_de_Cuenta_del_usuario_reportado = report.UserReported.IdStateNavigation.Name};                
+
+            // Return a success response with the updated report information
+            return StatusCode(200,ManageResponse.SuccessfullWithObject("Data actualizada",response));
         }
     }
 }

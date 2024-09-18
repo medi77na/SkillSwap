@@ -53,7 +53,7 @@ public static class ManageResponse
         };
     }
 
-        public static object Successfull(string text)
+    public static object Successfull(string text)
     {
         return new
         {
@@ -61,7 +61,23 @@ public static class ManageResponse
             details = new
             {
                 text
-            } 
+            }
+        };
+    }
+
+    public static object SuccessfullWithObject(string text, object obj)
+    {
+        return new
+        {
+            message = "Success",
+            details = new
+            {
+                text
+            },
+            data = new
+            {
+                obj
+            }
         };
     }
 }
