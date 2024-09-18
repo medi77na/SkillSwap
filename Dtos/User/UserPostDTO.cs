@@ -25,13 +25,7 @@ public class UserPostDTO
 
     public string? PhoneNumber { get; set; }
 
-<<<<<<< HEAD
     public string? Category { get; set; }
     
     public string? Abilities { get; set; }
-=======
-    public string Category { get; set; }
-
-    public string Abilities { get; set; }
->>>>>>> 79392373f61bb69e0b169cd8d9746469d8249383
 }
