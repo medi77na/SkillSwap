@@ -25,12 +25,12 @@ public class UsersDeleteController : ControllerBase
 
         if (user == null)
         {
-            return NotFound($"User with ID {id} not found.");
+            return StatusCode(404,ManageResponse.ErrorNotFound());
         }
 
         _dbContext.Users.Remove(user);
         await _dbContext.SaveChangesAsync();
 
-        return Ok($"User with ID {id} has been deleted.");
+        return StatusCode(200,ManageResponse.Successfull($"Usuario con id {id} ha sido eliminado."));
     }
 }

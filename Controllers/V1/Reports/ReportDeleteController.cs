@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
-
-
 using SkillSwap.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,11 +24,11 @@ namespace SkillSwap.Controllers.V1.Reports
             var find = await checkExistence(id);
             if (find == false)
             {
-                return NotFound($"Reporte con {id} no encontrado.");
+                return StatusCode(404, ManageResponse.ErrorNotFound());
             }
             _context.Reports.Remove(await _context.Reports.FindAsync(id));
             await _context.SaveChangesAsync();
-            return Ok("Reporte eliminado con éxito");
+            return StatusCode(200, ManageResponse.Successfull("Reporte eliminado con éxito"));
         }
 
         private async Task<bool> checkExistence(int id)

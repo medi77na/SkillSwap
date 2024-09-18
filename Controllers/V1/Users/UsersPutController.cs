@@ -39,10 +39,7 @@ public class UsersPutController : ControllerBase
 
         await _dbContext.SaveChangesAsync();
 
-        return Ok(new
-        {
-            message = "User has been updated"
-        });
+        return StatusCode(200,ManageResponse.Successfull("El usuario ha sido actulizado"));
     }
 
 
@@ -60,10 +57,7 @@ public class UsersPutController : ControllerBase
 
         await _dbContext.SaveChangesAsync();
 
-        return Ok(new
-        {
-            message = "User has been updated"
-        });
+        return StatusCode(200,ManageResponse.Successfull("El usuario ha sido actulizado"));
     }
 
     private async Task<bool> CheckExist(int id)
