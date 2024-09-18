@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SkillSwap.Dtos.User;
 
 namespace SkillSwap.Models;
 
@@ -37,11 +38,12 @@ public partial class User
     public int? IdRol { get; set; }
 
     public int? IdQualification { get; set; }
+    
     public int? IdAbility { get; set; }
 
-    public Ability Ability {get;set;}
+    public Ability? Ability {get;set;}
 
-    public Qualification Qualification { get; set; }
+    public Qualification? Qualification { get; set; }
 
     public virtual Role? IdRolNavigation { get; set; }
 

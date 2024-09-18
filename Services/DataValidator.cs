@@ -48,7 +48,10 @@ public class DataValidator
 
     public static bool ValidateContainNotNull(object input)
     {
-        if (string.IsNullOrEmpty((string?)input))
+
+        string? response = Convert.ToString(input);
+
+        if (string.IsNullOrEmpty(response))
         {
             return false;
         }

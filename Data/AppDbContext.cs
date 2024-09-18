@@ -28,6 +28,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Ability> Abilities { get; set; }
 
     public virtual DbSet<Report> Reports { get; set; }
+    public virtual DbSet<StateReport> StateReports { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +37,7 @@ public partial class AppDbContext : DbContext
             RoleSeeder.Seed(modelBuilder);
             StateRequestSeeder.Seed(modelBuilder);
             StateUserSeeder.Seed(modelBuilder);
+            StateReportSeeder.Seed(modelBuilder);
 
         modelBuilder
             .UseCollation("utf8_general_ci")

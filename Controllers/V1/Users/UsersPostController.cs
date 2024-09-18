@@ -1,8 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
-using SkillSwap.Services;
 using SkillSwap.Validations;
 namespace SkillSwap.Controllers.V1;
 
@@ -11,11 +11,13 @@ namespace SkillSwap.Controllers.V1;
 public class UsersPostController : ControllerBase
 {
     private readonly AppDbContext _dbContext;
+    private readonly IMapper _mapper;
 
     //Constructor
-    public UsersPostController(AppDbContext dbContext)
+    public UsersPostController(AppDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
+        _mapper = mapper;
     }
 
     // User Creation
@@ -49,34 +51,21 @@ public class UsersPostController : ControllerBase
         await _dbContext.SaveChangesAsync();
 
 
-        // Create the User instance with the DTO properties.
-        var user = new User
-        {
-            Email = userDTO.Email,
-            Password = userDTO.Password,
-            Name = userDTO.Name,
-            LastName = userDTO.LastName,
-            Birthdate = userDTO.Birthdate,
-            Description = userDTO.Description,
-            JobTitle = userDTO.JobTitle,
-            UrlLinkedin = userDTO.UrlLinkedin,
-            UrlGithub = userDTO.UrlGithub,
-            UrlBehance = userDTO.UrlBehance,
-            UrlImage = userDTO.UrlImage,
-            PhoneNumber = userDTO.PhoneNumber,
-            IdState = 1,
-            IdRol = 2,
-            IdQualification = qualification.Id,
-            IdAbility = abilities.Id
-        };
+        // Map the userDTO to the User model
+        var user = _mapper.Map<User>(userDTO);
 
-
+        // Set additional properties not included in the DTO
+        user.IdState = 1;
+        user.IdRol = 2;
+        user.IdQualification = qualification.Id;
+        user.IdAbility = abilities.Id;
 
         // Create PasswordHasher<User> instance
         var passwordHasher = new PasswordHasher<User>();
 
         // Hash the password and assign it to the user's Password property
         user.Password = passwordHasher.HashPassword(user, userDTO.Password);
+        
 
         // Save in database
         await _dbContext.Users.AddAsync(user);
