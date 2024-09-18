@@ -4,7 +4,6 @@
     // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
         "version": "0.2.0",
         "configurations": [
-
           {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
@@ -23,6 +22,15 @@
             },
             "sourceFileMap": {
               "/Views": "${workspaceFolder}/Views"
+            }
+          },
+          {
+            "name": "Docker .NET Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+              "appProject": "${workspaceFolder}/SkillSwap.csproj"
             }
           }
         ]
