@@ -5,7 +5,6 @@ using SkillSwap.Models;
 namespace SkillSwap.Services;
 public class DataValidator
 {
-
     public static async Task<bool> LookForRepeatEmail(AppDbContext context, string email)
     {
         return await context.Users.AnyAsync(e => e.Email == email);
@@ -31,7 +30,7 @@ public class DataValidator
         }
 
         // Verify that it contains only letters
-        var lettersOnlyRegex = new Regex(@"^[a-zA-Z\s]+$");
+        var lettersOnlyRegex = new Regex(@"^[\p{L}\s]+$");
         return lettersOnlyRegex.IsMatch(input);
     }
 
@@ -41,14 +40,13 @@ public class DataValidator
         {
             return false;
         }
+        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d)(?=.*[\+\-\.,;!""#$%&/()=?¿¡])[A-Za-z\d\+\-\.,;!""#$%&/()=?¿¡]{6,}$");
 
-        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
         return passwordRegex.IsMatch(password);
     }
 
     public static bool ValidateContainNotNull(object input)
     {
-
         string? response = Convert.ToString(input);
 
         if (string.IsNullOrEmpty(response))
