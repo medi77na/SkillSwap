@@ -31,7 +31,6 @@ public static class ReportValidation
         {
             return "The Id by reported user is required";
         }
-
         return "success";
     }
 }

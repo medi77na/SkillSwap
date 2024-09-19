@@ -20,7 +20,7 @@ public class RequestsGetController : ControllerBase
     /// <remarks>
     /// Obtain data on the requests received by a user.
     /// </remarks>
-    [HttpGet("/{id}")]
+    [HttpGet("requests/{id}")]
     public async Task<IActionResult> GetRequestById(int id)
     {
 
@@ -36,34 +36,35 @@ public class RequestsGetController : ControllerBase
             .Include(r => r.IdStateRequestNavigation)
             .ToListAsync();
 
-        if (request.Count != 0)
+        if (request.Count == 0)
         {
             return StatusCode(404, ManageResponse.ErrorNotFound());
         }
 
+        var user = await _dbContext.Users.FindAsync(id);
+
         var lastAccepted = request.Where(r => r.IdStateRequest == 2).OrderByDescending(r => r.Id).FirstOrDefault();
         var lastPending = request.Where(r => r.IdStateRequest == 1).OrderByDescending(r => r.Id).FirstOrDefault();
-        var lastCancelled = request.Where(r => r.IdStateRequest == 1).OrderByDescending(r => r.Id).FirstOrDefault();
+        var lastCancelled = request.Where(r => r.IdStateRequest == 3).OrderByDescending(r => r.Id).FirstOrDefault();
 
         var countAccepted = request.Count(r => r.IdStateRequest == 2);
-        var countPending = request.Count(r => r.IdStateRequest == 3);
-        var countCancelled = request.Count(r => r.IdStateRequest == 1);
+        var countPending = request.Count(r => r.IdStateRequest == 1);
+        var countCancelled = request.Count(r => r.IdStateRequest == 3);
 
         var response = new
         {
-            IdUsuario = id,
-            NombreUsuario = request.FirstOrDefault()?.IdReceivingUserNavigation?.Name,
+            IdUsuario = user?.Id,
+            NombreUsuario = $"{user?.Name} {user?.LastName}" ?? "Nombre no disponible",
             Solicitudes = new
             {
-                UltimaAceptada = $"{lastAccepted?.IdReceivingUserNavigation?.Name} {lastAccepted?.IdReceivingUserNavigation?.LastName}",
-                UltimaPendiente = $"{lastPending?.IdReceivingUserNavigation?.Name} {lastPending?.IdReceivingUserNavigation?.LastName}",
-                UltimaCancelada = $"{lastCancelled?.IdReceivingUserNavigation?.Name} {lastCancelled?.IdReceivingUserNavigation?.LastName}",
+                UltimaAceptada = $"{lastAccepted?.IdRequestingUserNavigation?.Name} {lastAccepted?.IdRequestingUserNavigation?.LastName}",
+                UltimaPendiente = $"{lastPending?.IdRequestingUserNavigation?.Name} {lastPending?.IdRequestingUserNavigation?.LastName}",
+                UltimaCancelada = $"{lastCancelled?.IdRequestingUserNavigation?.Name} {lastCancelled?.IdRequestingUserNavigation?.LastName}",
                 conteoAceptadas = countAccepted,
                 conteoPendientes = countPending,
                 conteoCanceladas = countCancelled
             }
         };
-
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Datos encontrados correctamente.",response));
     }
 
@@ -72,5 +73,4 @@ public class RequestsGetController : ControllerBase
         var response = await _dbContext.Users.FindAsync(id);
         return response != null ? true : false;
     }
-
 }
