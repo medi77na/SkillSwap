@@ -47,7 +47,7 @@ public class UsersGetController : ControllerBase
                 RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
             })
             .ToListAsync();
-         return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada", users));
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", users));
     }
 
 
@@ -87,7 +87,7 @@ public class UsersGetController : ControllerBase
             UrlBehance = user.UrlBehance,
             RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
         };
-        return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
     }
 
 
@@ -115,7 +115,74 @@ public class UsersGetController : ControllerBase
             StateName = user.IdState != null ? user.IdStateNavigation.Name : "No state"
         };
 
-        return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
+    }
+    [HttpGet("ForImages")]
+    public async Task<IActionResult> GetUsersForImages()
+    {
+        // Obtener las solicitudes realizadas por cada usuario
+        var requestsMade = await _dbContext.Requests
+            .Where(r => r.IdStateRequest == 2)
+            .GroupBy(r => r.IdRequestingUser)
+            .Select(g => new
+            {
+                UserId = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync();
+
+        // Obtener las solicitudes recibidas por cada usuario
+        var requestsReceived = await _dbContext.Requests
+            .Where(r => r.IdStateRequest == 2)
+            .GroupBy(r => r.IdReceivingUser)
+            .Select(g => new
+            {
+                UserId = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync();
+
+        var requestCounts = requestsMade.Concat(requestsReceived)
+            .GroupBy(r => r.UserId)
+            .Select(g => new
+            {
+                UserId = g.Key,
+                Count = g.Sum(x => x.Count)
+            })
+            .ToList();
+
+        // Obtener los usuarios sin realizar conversiones en la consulta
+        var users = await _dbContext.Users
+            .Include(u => u.Qualification)
+            .Include(u => u.Ability)
+            .Select(u => new
+            {
+                Id = u.Id,
+                FullName = $"{u.Name} {u.LastName}",
+                JobTitle = u.JobTitle,
+                Qualification = new
+                {
+                    Count = u.Qualification.Count,
+                    acummulator = u.Qualification.AccumulatorAdition
+                },
+                Description = u.Description,
+                Abilities = u.Ability.Abilities
+            })
+            .ToListAsync();
+
+        // Realizar la proyección y el procesamiento en memoria
+        var userDtos = users.Select(u => new UserGetForImagesDTO
+        {
+            Id = u.Id,
+            FullName = u.FullName,
+            JobTitle = u.JobTitle,
+            Qualification = u.Qualification.Count > 0 ? (double)u.Qualification.acummulator / u.Qualification.Count : 0,
+            CountMatches = requestCounts.Count,
+            Description = u.Description,
+            Abilities = u.Abilities
+        }).ToList();
+
+        return Ok(userDtos);
     }
 
     private async Task<bool> CheckExist(int id)
