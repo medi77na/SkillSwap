@@ -21,7 +21,7 @@ public class ReportsPostController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateReport([FromBody] ReportPostDTO reportDTO)
+    public async Task<IActionResult> CreateReport([FromBody] ReportDTO reportDTO)
     {
 
         var response = await ReportValidation.GeneralValidationAsync(reportDTO);

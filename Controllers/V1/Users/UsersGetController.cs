@@ -35,12 +35,14 @@ public class UsersGetController : ControllerBase
                 Id = user.Id,
                 Name = user.Name,
                 LastName = user.LastName,
+                UrlImage = user.UrlImage,
                 JobTitle = user.JobTitle,
                 Description = user.Description,
                 Birthdate = user.Birthdate,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                AbilityCategory = user.Ability != null ? user.Ability.Category : "No abilities",
+                AbilityCategory = user.Ability != null ? user.Ability.Category : "No category abilities",
+                Abilities = user.Ability != null ? user.Ability.Abilities : "No abilities",
                 UrlLinkedin = user.UrlLinkedin,
                 UrlGithub = user.UrlGithub,
                 UrlBehance = user.UrlBehance,
@@ -76,12 +78,14 @@ public class UsersGetController : ControllerBase
             Id = user.Id,
             Name = user.Name,
             LastName = user.LastName,
+            UrlImage = user.UrlImage,
             JobTitle = user.JobTitle,
             Description = user.Description,
             Birthdate = user.Birthdate,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
-            AbilityCategory = user.Ability != null ? user.Ability.Category : "No abilities",
+            AbilityCategory = user.Ability != null ? user.Ability.Category : "No category abilities",
+            Abilities = user.Ability != null ? user.Ability.Abilities : "No abilities",
             UrlLinkedin = user.UrlLinkedin,
             UrlGithub = user.UrlGithub,
             UrlBehance = user.UrlBehance,
@@ -166,7 +170,8 @@ public class UsersGetController : ControllerBase
                     acummulator = u.Qualification.AccumulatorAdition
                 },
                 Description = u.Description,
-                Abilities = u.Ability.Abilities
+                Abilities = u.Ability.Abilities,
+                Image = u.UrlImage
             })
             .ToListAsync();
 
@@ -179,7 +184,8 @@ public class UsersGetController : ControllerBase
             Qualification = u.Qualification.Count > 0 ? (double)u.Qualification.acummulator / u.Qualification.Count : 0,
             CountMatches = requestCounts.Count,
             Description = u.Description,
-            Abilities = u.Abilities
+            Abilities = u.Abilities,
+            UrlImage = u.Image
         }).ToList();
 
         return Ok(userDtos);
@@ -190,5 +196,4 @@ public class UsersGetController : ControllerBase
         var response = await _dbContext.Users.FindAsync(id);
         return response != null ? true : false;
     }
-
 }

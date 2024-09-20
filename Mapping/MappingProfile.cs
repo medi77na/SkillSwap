@@ -11,7 +11,7 @@ public class MappingProfile : Profile
     {
         CreateMap<UserPostDTO, User>();
         CreateMap<UserPutAdminDTO, User>();
-        CreateMap<ReportPostDTO, Report>();
+        CreateMap<ReportDTO, Report>();
         CreateMap<RequestPostDTO, Request>();
     }
 }
