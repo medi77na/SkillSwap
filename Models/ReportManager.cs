@@ -9,7 +9,7 @@ namespace SkillSwap.Models
 {
     public class ReportManager
     {
-        public static async Task<List<ReportGetDTO>> ReportProjection(AppDbContext _dbContext, List<Report> reports)
+        public static async Task<object> ReportProjection(AppDbContext _dbContext, List<Report> reports)
         {
             // Additional query to obtain the required users
             var userIds = reports.Select(r => r.IdUser)
@@ -40,17 +40,17 @@ namespace SkillSwap.Models
             .ToDictionaryAsync(r => r.Id);
 
             // Final projection to DTO with combined User and ReportedUser
-            var reportDtos = reports.Select(report => new ReportGetDTO
+            var reportDtos = reports.Select(report => new 
             {
                 Id = report.Id,
-                Title = report.TitleReport,
+                TitleReport = report.TitleReport,
                 Description = report.Description,
                 DateReport = report.DateReport,
                 ActionTaken = report.ActionTaken,
                 State = stateReports.ContainsKey(report.IdState)? $"{stateReports[report.IdState].Name}" : null,
                 User = users.ContainsKey(report.IdUser) ? $"{users[report.IdUser].Name} {users[report.IdUser].LastName}" : null,
                 ReportedUser = users.ContainsKey(report.IdReportedUser) ? $"{users[report.IdReportedUser].Name} {users[report.IdReportedUser].LastName}" : null
-            }).ToList();
+            });
 
             return reportDtos;
         }
