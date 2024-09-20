@@ -57,23 +57,23 @@ namespace SkillSwap.Controllers.V1.Reports
 
 
             // Update the report and user's state based on the action
-            if (report.ActionTaken.Contains("suspender", StringComparison.OrdinalIgnoreCase))
+            if (reportDTO.ActionTaken.Contains("suspender", StringComparison.OrdinalIgnoreCase))
             {
                 report.IdState = 2;
                 report.UserReported.IdState = 3;
                 report.ActionTaken = "usuario suspendido";
             }
-            else if (report.ActionTaken.Contains("habilitar", StringComparison.OrdinalIgnoreCase))
+            else if (reportDTO.ActionTaken.Contains("habilitar", StringComparison.OrdinalIgnoreCase))
             {
                 report.IdState = 3; // Cambié a 1 porque es para habilitar, antes estaba 3
                 report.UserReported.IdState = 1;
                 report.ActionTaken = "usuario habilitado";
             }
-            else if (report.ActionTaken.Contains("inactivar", StringComparison.OrdinalIgnoreCase))
+            else if (reportDTO.ActionTaken.Contains("deshabilitar", StringComparison.OrdinalIgnoreCase))
             {
                 report.IdState = 3;
                 report.UserReported.IdState = 2;
-                report.ActionTaken = "usuario inactivado";
+                report.ActionTaken = "usuario deshabilitado";
             }
             else
             {
