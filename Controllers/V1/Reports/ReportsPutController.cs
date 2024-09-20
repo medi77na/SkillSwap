@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SkillSwap.Dtos.Report;
 using SkillSwap.Models;
 
 namespace SkillSwap.Controllers.V1.Reports
@@ -20,9 +21,9 @@ namespace SkillSwap.Controllers.V1.Reports
 
         // PUT action for updating the status of a report
         [HttpPut("PutActionOnReport")]
-        public async Task<IActionResult> PutActionOnReport(string action, int idReport, int idUserReport)
+        public async Task<IActionResult> PutActionOnReport([FromBody] ReportDTO reportDTO)
         {
-            if (idReport == default(int) || action == null || idUserReport == default(int))
+            if (reportDTO.Id == default(int) || reportDTO.ActionTaken == null || reportDTO.IdReportedUser == default(int))
             {
                 return StatusCode(400, ManageResponse.ErrorBadRequest("Error, ninguno de los datos puede estar vacío."));
             }
@@ -34,7 +35,7 @@ namespace SkillSwap.Controllers.V1.Reports
                 .Include(r => r.UserReported.IdStateNavigation)
                 .Include(r => r.StateReport)
                 // Incluir el usuario relacionado
-                .FirstOrDefaultAsync(r => r.Id == idReport && r.IdReportedUser == idUserReport);
+                .FirstOrDefaultAsync(r => r.Id == reportDTO.Id && r.IdReportedUser == reportDTO.IdReportedUser);
 
             // If the report is not found, return a 404 Not Found response
             if (report == null)
@@ -56,19 +57,19 @@ namespace SkillSwap.Controllers.V1.Reports
 
 
             // Update the report and user's state based on the action
-            if (action.Contains("suspender", StringComparison.OrdinalIgnoreCase))
+            if (report.ActionTaken.Contains("suspender", StringComparison.OrdinalIgnoreCase))
             {
                 report.IdState = 2;
                 report.UserReported.IdState = 3;
                 report.ActionTaken = "usuario suspendido";
             }
-            else if (action.Contains("habilitar", StringComparison.OrdinalIgnoreCase))
+            else if (report.ActionTaken.Contains("habilitar", StringComparison.OrdinalIgnoreCase))
             {
                 report.IdState = 3; // Cambié a 1 porque es para habilitar, antes estaba 3
                 report.UserReported.IdState = 1;
                 report.ActionTaken = "usuario habilitado";
             }
-            else if (action.Contains("inactivar", StringComparison.OrdinalIgnoreCase))
+            else if (report.ActionTaken.Contains("inactivar", StringComparison.OrdinalIgnoreCase))
             {
                 report.IdState = 3;
                 report.UserReported.IdState = 2;
