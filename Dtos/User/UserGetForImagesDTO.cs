@@ -14,5 +14,6 @@ namespace SkillSwap.Dtos.User
         public int CountMatches { get; set; }
         public string Description { get; set; }
         public string Abilities { get; set; }
+        public string UrlImage { get; set; }
     }
 }

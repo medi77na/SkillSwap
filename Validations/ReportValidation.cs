@@ -5,7 +5,7 @@ using SkillSwap.Services;
 namespace SkillSwap.Validations;
 public static class ReportValidation
 {
-    public static async Task<string> GeneralValidationAsync([FromBody] ReportPostDTO reportDTO)
+    public static async Task<string> GeneralValidationAsync([FromBody] ReportDTO reportDTO)
     {
         if (!DataValidator.ValidateLettersOnly(reportDTO.TitleReport))
         {

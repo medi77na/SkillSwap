@@ -170,7 +170,8 @@ public class UsersGetController : ControllerBase
                     acummulator = u.Qualification.AccumulatorAdition
                 },
                 Description = u.Description,
-                Abilities = u.Ability.Abilities
+                Abilities = u.Ability.Abilities,
+                Image = u.UrlImage
             })
             .ToListAsync();
 
@@ -183,7 +184,8 @@ public class UsersGetController : ControllerBase
             Qualification = u.Qualification.Count > 0 ? (double)u.Qualification.acummulator / u.Qualification.Count : 0,
             CountMatches = requestCounts.Count,
             Description = u.Description,
-            Abilities = u.Abilities
+            Abilities = u.Abilities,
+            UrlImage = u.Image
         }).ToList();
 
         return Ok(userDtos);
