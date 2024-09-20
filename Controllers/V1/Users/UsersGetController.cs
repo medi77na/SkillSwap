@@ -35,12 +35,14 @@ public class UsersGetController : ControllerBase
                 Id = user.Id,
                 Name = user.Name,
                 LastName = user.LastName,
+                UrlImage = user.UrlImage,
                 JobTitle = user.JobTitle,
                 Description = user.Description,
                 Birthdate = user.Birthdate,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                AbilityCategory = user.Ability != null ? user.Ability.Category : "No abilities",
+                AbilityCategory = user.Ability != null ? user.Ability.Category : "No category abilities",
+                Abilities = user.Ability != null ? user.Ability.Abilities : "No abilities",
                 UrlLinkedin = user.UrlLinkedin,
                 UrlGithub = user.UrlGithub,
                 UrlBehance = user.UrlBehance,
@@ -76,12 +78,14 @@ public class UsersGetController : ControllerBase
             Id = user.Id,
             Name = user.Name,
             LastName = user.LastName,
+            UrlImage = user.UrlImage,
             JobTitle = user.JobTitle,
             Description = user.Description,
             Birthdate = user.Birthdate,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
-            AbilityCategory = user.Ability != null ? user.Ability.Category : "No abilities",
+            AbilityCategory = user.Ability != null ? user.Ability.Category : "No category abilities",
+            Abilities = user.Ability != null ? user.Ability.Abilities : "No abilities",
             UrlLinkedin = user.UrlLinkedin,
             UrlGithub = user.UrlGithub,
             UrlBehance = user.UrlBehance,
@@ -192,5 +196,4 @@ public class UsersGetController : ControllerBase
         var response = await _dbContext.Users.FindAsync(id);
         return response != null ? true : false;
     }
-
 }
