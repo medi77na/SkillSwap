@@ -7,6 +7,8 @@ public class UserGetDTO
 
     public required string LastName { get; set; }
 
+    public string? UrlImage { get; set; }
+
     public required string JobTitle { get; set; }
 
     public required string Description { get; set; }
@@ -18,6 +20,8 @@ public class UserGetDTO
     public string? PhoneNumber { get; set; }
 
     public string? AbilityCategory { get; set; }
+
+    public string? Abilities { get; set; }
 
     public string? UrlLinkedin { get; set; }
 
