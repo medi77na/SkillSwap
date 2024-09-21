@@ -65,7 +65,7 @@ public static class ManageResponse
         };
     }
 
-    public static object SuccessfullWithObject(string text, object obj)
+    public static object SuccessfullWithObject(string text, object response)
     {
         return new
         {
@@ -76,7 +76,7 @@ public static class ManageResponse
             },
             data = new
             {
-                obj
+                response
             }
         };
     }

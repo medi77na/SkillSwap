@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -48,11 +49,10 @@ public class UsersGetController : ControllerBase
                 RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
             })
             .ToListAsync();
-            
+
         // Return a successful response with the list of users.
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", users));
     }
-
 
     /// <summary>
     /// Get user by Id
@@ -101,14 +101,13 @@ public class UsersGetController : ControllerBase
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
     }
 
-
     [HttpGet("ForImages")]
     public async Task<IActionResult> GetUsersForImages()
     {
         // Get the requests made by each user where the request state is 2 (e.g., completed)
         var requestsMade = await _dbContext.Requests
             .Where(r => r.IdStateRequest == 2)
-            .GroupBy(r => r.IdRequestingUser) 
+            .GroupBy(r => r.IdRequestingUser)
             .Select(g => new
             {
                 UserId = g.Key,
@@ -170,7 +169,7 @@ public class UsersGetController : ControllerBase
             UrlImage = u.Image
         }).ToList();
 
-        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada",userDtos));
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", userDtos));
     }
 
     [HttpGet("Admin/{id}")]
