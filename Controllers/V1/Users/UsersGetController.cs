@@ -18,7 +18,6 @@ public class UsersGetController : ControllerBase
         _dbContext = dbContext;
     }
 
-
     /// <summary>
     /// GENERAL INFORMATION
     /// </summary>

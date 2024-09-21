@@ -54,13 +54,13 @@ public class RequestsGetController : ControllerBase
         var user = await _dbContext.Users.FindAsync(id);
 
         // Get the last requests of each type based on their status.
-        var lastAccepted = request.Where(r => r.IdStateRequest == 2).OrderByDescending(r => r.Id).FirstOrDefault();
+        var lastConnection = request.Where(r => r.IdStateRequest == 2).OrderByDescending(r => r.Id).FirstOrDefault();
         var lastPending = request.Where(r => r.IdStateRequest == 1).OrderByDescending(r => r.Id).FirstOrDefault();
         var lastCancelled = request.Where(r => r.IdStateRequest == 3).OrderByDescending(r => r.Id).FirstOrDefault();
         var lastSent = requestSent.Where(r => r.IdStateRequest == 1).OrderByDescending(r => r.Id).FirstOrDefault();
 
         // Count the number of requests based on their status.
-        var countAccepted = request.Count(r => r.IdStateRequest == 2);
+        var countConnection = request.Count(r => r.IdStateRequest == 2);
         var countReceived = request.Count(r => r.IdStateRequest == 1);
         var countCancelled = request.Count(r => r.IdStateRequest == 3);
         var countSent = requestSent.Count(r => r.IdStateRequest == 1);
@@ -72,11 +72,11 @@ public class RequestsGetController : ControllerBase
             NombreUsuario = $"{user?.Name} {user?.LastName}" ?? "Nombre no disponible",
             Solicitudes = new
             {
-                UltimaAceptada = $"{lastAccepted?.IdRequestingUserNavigation?.Name} {lastAccepted?.IdRequestingUserNavigation?.LastName}",
+                UltimaConexion = $"{lastConnection?.IdRequestingUserNavigation?.Name} {lastConnection?.IdRequestingUserNavigation?.LastName}",
                 UltimaPendiente = $"{lastPending?.IdRequestingUserNavigation?.Name} {lastPending?.IdRequestingUserNavigation?.LastName}",
                 UltimaCancelada = $"{lastCancelled?.IdRequestingUserNavigation?.Name} {lastCancelled?.IdRequestingUserNavigation?.LastName}",
                 UltimoEnviado = $"{lastSent?.IdReceivingUserNavigation?.Name} {lastSent?.IdReceivingUserNavigation?.LastName}",
-                conteoAceptadas = countAccepted,
+                conteoConexiones = countConnection,
                 conteoPendientes = countReceived,
                 conteoCanceladas = countCancelled,
                 conteoEnviadas = countSent
