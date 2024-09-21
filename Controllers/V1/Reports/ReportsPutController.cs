@@ -40,58 +40,62 @@ namespace SkillSwap.Controllers.V1.Reports
             // If the report is not found, return a 404 Not Found response
             if (report == null)
             {
-                return StatusCode(400,ManageResponse.ErrorNotFound());
+                return StatusCode(400, ManageResponse.ErrorNotFound());
             }
 
             // Ensure the user is not null before accessing their properties
             if (report.User == null)
             {
-                return StatusCode(400,ManageResponse.ErrorNotFound());
+                return StatusCode(400, ManageResponse.ErrorNotFound());
             }
 
             // Ensure the UserReported is not null before accessing their properties
             if (report.UserReported == null)
             {
-                return StatusCode(400,ManageResponse.ErrorNotFound());
+                return StatusCode(400, ManageResponse.ErrorNotFound());
             }
 
 
             // Update the report and user's state based on the action
-            if (report.ActionTaken.Contains("suspender", StringComparison.OrdinalIgnoreCase))
+            if (reportDTO.ActionTaken.Equals("suspender", StringComparison.OrdinalIgnoreCase))
             {
                 report.IdState = 2;
                 report.UserReported.IdState = 3;
                 report.ActionTaken = "usuario suspendido";
             }
-            else if (report.ActionTaken.Contains("habilitar", StringComparison.OrdinalIgnoreCase))
+            else if (reportDTO.ActionTaken.Equals("habilitar", StringComparison.OrdinalIgnoreCase))
             {
-                report.IdState = 3; // Cambié a 1 porque es para habilitar, antes estaba 3
+                report.IdState = 3; // Cambié a 1 porque es para habilitar
                 report.UserReported.IdState = 1;
                 report.ActionTaken = "usuario habilitado";
             }
-            else if (report.ActionTaken.Contains("inactivar", StringComparison.OrdinalIgnoreCase))
+            else if (reportDTO.ActionTaken.Equals("deshabilitar", StringComparison.OrdinalIgnoreCase))
             {
                 report.IdState = 3;
                 report.UserReported.IdState = 2;
-                report.ActionTaken = "usuario inactivado";
+                report.ActionTaken = "usuario deshabilitado";
             }
             else
             {
                 return StatusCode(400, ManageResponse.ErrorBadRequest("Acción no reconocida."));
             }
 
+
             // Save changes to the database
             await _dbContext.SaveChangesAsync();
 
-            var response = new{  Id_del_reporte = report.Id,
-                    Estado = report.StateReport.Name,
-                    AccionTomada = report.ActionTaken,
-                    Id_del_usuario_reportado = report.IdReportedUser,
-                    nombre = report.User.Name,
-                    estado_de_Cuenta_del_usuario_reportado = report.UserReported.IdStateNavigation.Name};                
+            var response = new
+            {
+                Id_del_reporte = report.Id,
+                Estado = report.StateReport.Name,
+                AccionTomada = report.ActionTaken,
+                Id_del_usuario_reportado = report.IdReportedUser,
+                nombre = report.User.Name,
+                estado_de_Cuenta_del_usuario_reportado = report.UserReported.IdStateNavigation.Name
+            };
 
             // Return a success response with the updated report information
-            return StatusCode(200,ManageResponse.SuccessfullWithObject("Data actualizada",response));
+            return StatusCode(200, ManageResponse.SuccessfullWithObject("Data actualizada", response));
         }
     }
 }
