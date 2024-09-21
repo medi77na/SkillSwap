@@ -26,4 +26,18 @@ public static class RequestValidation
         return "correct";
     }
 
+        public static async Task<string> StateValidation(RequestPatchDTO requestDTO)
+    {
+        if (!DataValidator.ValidateContainNotNull(requestDTO.IdStateRequest))
+        {
+            return "El estado es requerido";
+        }
+
+        if (requestDTO.IdStateRequest < 1 || requestDTO.IdStateRequest > 3)
+        {
+            return "Estado fuera de rango";
+        }
+        return "correct";
+    }
+
 }
