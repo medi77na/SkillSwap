@@ -23,14 +23,19 @@ public class UsersDeleteController : ControllerBase
         // Find the user in the database by their ID
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
 
+        // If the user is not found, return a 404 Not Found response.
         if (user == null)
         {
             return StatusCode(404,ManageResponse.ErrorNotFound());
         }
 
+        // Remove the user from the database context.
         _dbContext.Users.Remove(user);
+
+         // Save the changes to the database.
         await _dbContext.SaveChangesAsync();
 
+        // Return a success message indicating the user has been deleted.
         return StatusCode(200,ManageResponse.Successfull($"Usuario con id {id} ha sido eliminado."));
     }
 }
