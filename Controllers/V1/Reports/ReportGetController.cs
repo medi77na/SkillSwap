@@ -24,7 +24,7 @@ namespace SkillSwap.Controllers.V1.Admin
         [HttpGet("Reports")]
         public async Task<IActionResult> GetReports()
         {
-            // Main query to obtain reports
+            // Main query to obtain reports from the database.
             var reports = await _dbContext.Reports
                 .Select(report => new Report
                 {
@@ -38,15 +38,18 @@ namespace SkillSwap.Controllers.V1.Admin
                     IdReportedUser = report.IdReportedUser
                 })
                 .ToListAsync();
-            
+
+            // Process the reports through the ReportManager for any additional logic or projection.
             var reportDtos = await ReportManager.ReportProjection(_dbContext, reports);
-            return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada",reportDtos) );
+
+            // Return a successful response with the list of reports.
+            return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", reportDtos));
         }
 
         [HttpGet("Reports/{id}")]
         public async Task<IActionResult> GetReportById(int id)
         {
-            // Obtain the users from the database and project only the desired fields.
+            // Query to obtain the report from the database based on the provided ID.
             var reports = await _dbContext.Reports.Where(r => r.Id == id)
             .Select(report => new Report
             {
@@ -61,8 +64,11 @@ namespace SkillSwap.Controllers.V1.Admin
             })
             .ToListAsync();
 
+            // Process the retrieved report through the ReportManager for any additional logic.
             var reportDtos = await ReportManager.ReportProjection(_dbContext, reports);
-            return StatusCode(200,ManageResponse.SuccessfullWithObject("Data encontrada",reportDtos) );
+
+            // Return a successful response with the report data.
+            return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", reportDtos));
         }
     }
 }
