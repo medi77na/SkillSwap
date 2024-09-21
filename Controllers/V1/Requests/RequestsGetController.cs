@@ -118,6 +118,12 @@ public class RequestsGetController : ControllerBase
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", requestReceiving));
     }
 
+    /// <summary>
+    /// Get connection data
+    /// </summary>
+    /// <remarks>
+    /// A Boolean is obtained from the search if two users are connected.
+    /// </remarks>
     [HttpGet("ViewDetails")]
     public async Task<IActionResult> GetViewDetails(int currectId, int requestId)
     {
