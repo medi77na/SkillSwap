@@ -47,6 +47,9 @@ namespace SkillSwap.Models
                 Description = report.Description,
                 DateReport = report.DateReport,
                 ActionTaken = report.ActionTaken,
+                IdState = report.IdState,
+                IdUser = report.IdUser,
+                IdReportedUser = report.IdReportedUser,
                 State = stateReports.ContainsKey(report.IdState)? $"{stateReports[report.IdState].Name}" : null,
                 User = users.ContainsKey(report.IdUser) ? $"{users[report.IdUser].Name} {users[report.IdUser].LastName}" : null,
                 ReportedUser = users.ContainsKey(report.IdReportedUser) ? $"{users[report.IdReportedUser].Name} {users[report.IdReportedUser].LastName}" : null

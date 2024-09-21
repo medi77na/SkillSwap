@@ -49,6 +49,8 @@ public class UsersGetController : ControllerBase
                 RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
             })
             .ToListAsync();
+            
+        // Return a successful response with the list of users.
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", users));
     }
 
@@ -63,16 +65,20 @@ public class UsersGetController : ControllerBase
     [HttpGet("/{id}")]
     public async Task<IActionResult> GetUserById(int id)
     {
+
+        // Retrieve the user by ID, including related data such as abilities and role navigation.
         var user = await _dbContext.Users
         .Include(u => u.Ability)
         .Include(u => u.IdRolNavigation)
         .FirstOrDefaultAsync(u => u.Id == id);
 
+        // Return a 404 status if the user is not found.
         if (user == null)
         {
             return StatusCode(404, ManageResponse.ErrorNotFound());
         }
 
+        // Create a DTO object to structure the response data for the user.
         var getUser = new UserGetDTO
         {
             Id = user.Id,
@@ -91,43 +97,19 @@ public class UsersGetController : ControllerBase
             UrlBehance = user.UrlBehance,
             RoleName = user.IdRol != null ? user.IdRolNavigation.Name : "No role"
         };
+
+        // Return a successful response with the user data.
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
     }
 
 
-    /// <summary>
-    /// Get state from user
-    /// </summary>
-    /// <remarks>
-    /// obtain the user's current status
-    /// </remarks>
-    [HttpGet("/state/{id}")]
-    public async Task<IActionResult> GetStateFromUser(int id)
-    {
-        var user = await _dbContext.Users
-           .Include(u => u.IdStateNavigation)
-           .FirstOrDefaultAsync(u => u.Id == id);
-
-        if (user == null)
-        {
-            return StatusCode(404, ManageResponse.ErrorNotFound());
-        }
-
-        var getUser = new UserStateDTO
-        {
-            Id = user.Id,
-            StateName = user.IdState != null ? user.IdStateNavigation.Name : "No state"
-        };
-
-        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
-    }
     [HttpGet("ForImages")]
     public async Task<IActionResult> GetUsersForImages()
     {
-        // Obtener las solicitudes realizadas por cada usuario
+        // Get the requests made by each user where the request state is 2 (e.g., completed)
         var requestsMade = await _dbContext.Requests
             .Where(r => r.IdStateRequest == 2)
-            .GroupBy(r => r.IdRequestingUser)
+            .GroupBy(r => r.IdRequestingUser) 
             .Select(g => new
             {
                 UserId = g.Key,
@@ -135,7 +117,7 @@ public class UsersGetController : ControllerBase
             })
             .ToListAsync();
 
-        // Obtener las solicitudes recibidas por cada usuario
+        // Get the requests received by each user where the request state is 2
         var requestsReceived = await _dbContext.Requests
             .Where(r => r.IdStateRequest == 2)
             .GroupBy(r => r.IdReceivingUser)
@@ -146,6 +128,7 @@ public class UsersGetController : ControllerBase
             })
             .ToListAsync();
 
+        // Combine the counts of requests made and received by each user
         var requestCounts = requestsMade.Concat(requestsReceived)
             .GroupBy(r => r.UserId)
             .Select(g => new
@@ -155,7 +138,7 @@ public class UsersGetController : ControllerBase
             })
             .ToList();
 
-        // Obtener los usuarios sin realizar conversiones en la consulta
+        // Retrieve users without performing further transformations in the query
         var users = await _dbContext.Users
             .Include(u => u.Qualification)
             .Include(u => u.Ability)
@@ -175,7 +158,7 @@ public class UsersGetController : ControllerBase
             })
             .ToListAsync();
 
-        // Realizar la proyección y el procesamiento en memoria
+        // Project and process the data in memory
         var userDtos = users.Select(u => new UserGetForImagesDTO
         {
             Id = u.Id,
@@ -188,12 +171,46 @@ public class UsersGetController : ControllerBase
             UrlImage = u.Image
         }).ToList();
 
-        return Ok(userDtos);
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada",userDtos));
     }
 
-    private async Task<bool> CheckExist(int id)
+    [HttpGet("Admin/{id}")]
+    public async Task<IActionResult> GetByUserFromAdmin(int id)
     {
-        var response = await _dbContext.Users.FindAsync(id);
-        return response != null ? true : false;
+
+        // Query the user from the database by ID and include their related abilities.
+        var userFinded = await _dbContext.Users
+            .Include(r => r.Ability)
+            .FirstOrDefaultAsync(r => r.Id == id);
+
+        // If the user is not found, return a 404 status code with a not-found error message.
+        if (userFinded == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorNotFound());
+        }
+
+        // Create a response object with detailed information about the user, including profile and abilities.
+        var response = new
+        {
+            Email = userFinded.Email,
+            Password = userFinded.Password,
+            Name = userFinded.Name,
+            LastName = userFinded.LastName,
+            Birthdate = userFinded.Birthdate,
+            Description = userFinded.Description,
+            JobTitle = userFinded.JobTitle,
+            UrlLinkedin = userFinded.UrlLinkedin,
+            UrlGithub = userFinded.UrlGithub,
+            UrlBehance = userFinded.UrlBehance,
+            UrlImage = userFinded.UrlImage,
+            PhoneNumber = userFinded.PhoneNumber,
+            Category = userFinded.Ability.Category,
+            Abilities = userFinded.Ability.Abilities,
+            IdState = userFinded.IdState,
+            IdRol = userFinded.IdRol
+        };
+
+        // Return a 200 status code with a success message and the user profile data.
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("El usuario ha sido encontrado", response));
     }
 }
