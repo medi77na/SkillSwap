@@ -85,7 +85,7 @@ public class RequestsGetController : ControllerBase
         };
 
         // Return a successful response with the user and request data.
-        return StatusCode(200, ManageResponse.SuccessfullWithObject("Datos encontrados correctamente.",  response));
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Datos encontrados correctamente.", response));
     }
 
     /// <summary>
@@ -116,6 +116,36 @@ public class RequestsGetController : ControllerBase
             .ToListAsync();
 
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", requestReceiving));
+    }
+
+    [HttpGet("ViewDetails")]
+    public async Task<IActionResult> GetViewDetails(int currectId, int requestId)
+    {
+        if (currectId == null || requestId == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorBadRequest);
+        }
+
+        var request = await _dbContext.Requests
+                                .Where(r => r.IdReceivingUser == currectId && r.IdRequestingUser == requestId)
+                                .FirstOrDefaultAsync();
+
+        if (request == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorNotFound());                   
+        }
+
+        var stateRequest = request.IdStateRequest;
+        var response = true;
+
+        if(stateRequest == 2)
+        {
+            response = true;
+        }else{
+            response = false;
+        }
+
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", response));
     }
 
     /// Checks if a user exists in the database.
