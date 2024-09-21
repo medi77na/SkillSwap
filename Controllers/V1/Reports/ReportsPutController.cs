@@ -21,9 +21,10 @@ namespace SkillSwap.Controllers.V1.Reports
 
         // PUT action for updating the status of a report
         [HttpPut("PutActionOnReport")]
-        public async Task<IActionResult> PutActionOnReport([FromBody] ReportDTO reportDTO)
+        public async Task<IActionResult> PutActionOnReport([FromBody] ReportActionDTO reportDTO)
         {
-            if (reportDTO.Id == default(int) || reportDTO.ActionTaken == null || reportDTO.IdReportedUser == default(int))
+            string message = "";
+            if (reportDTO.Id == default(int) || reportDTO.ActionTaken == null || reportDTO.IdReportedUser == default(int) || reportDTO.IdUser == default(int))
             {
                 return StatusCode(400, ManageResponse.ErrorBadRequest("Error, ninguno de los datos puede estar vacío."));
             }
@@ -55,22 +56,33 @@ namespace SkillSwap.Controllers.V1.Reports
                 return StatusCode(400, ManageResponse.ErrorNotFound());
             }
 
-
             // Update the report and user's state based on the action
             if (reportDTO.ActionTaken.Equals("suspender", StringComparison.OrdinalIgnoreCase))
             {
+                if (report.UserReported.IdState == 3)
+                {
+                    message = ", El usuario reportado ya se encuentra suspendido";
+                }
                 report.IdState = 2;
                 report.UserReported.IdState = 3;
                 report.ActionTaken = "usuario suspendido";
             }
             else if (reportDTO.ActionTaken.Equals("habilitar", StringComparison.OrdinalIgnoreCase))
             {
-                report.IdState = 3; // Cambié a 1 porque es para habilitar
+                if (report.UserReported.IdState == 1)
+                {
+                    message = ", El usuario reportado ya se encuentra habilitado";
+                }
+                report.IdState = 3;
                 report.UserReported.IdState = 1;
                 report.ActionTaken = "usuario habilitado";
             }
             else if (reportDTO.ActionTaken.Equals("deshabilitar", StringComparison.OrdinalIgnoreCase))
             {
+                if (report.UserReported.IdState == 2)
+                {
+                    message = ", El usuario reportado ya se encuentra deshabilitado";
+                }
                 report.IdState = 3;
                 report.UserReported.IdState = 2;
                 report.ActionTaken = "usuario deshabilitado";
@@ -80,22 +92,30 @@ namespace SkillSwap.Controllers.V1.Reports
                 return StatusCode(400, ManageResponse.ErrorBadRequest("Acción no reconocida."));
             }
 
-
             // Save changes to the database
             await _dbContext.SaveChangesAsync();
+
+            report = await _dbContext.Reports
+               .Include(r => r.User)
+               .Include(r => r.UserReported)
+               .Include(r => r.UserReported.IdStateNavigation)
+               .Include(r => r.StateReport)
+               // Incluir el usuario relacionado
+               .FirstOrDefaultAsync(r => r.Id == reportDTO.Id && r.IdReportedUser == reportDTO.IdReportedUser);
 
             var response = new
             {
                 Id_del_reporte = report.Id,
                 Estado = report.StateReport.Name,
                 AccionTomada = report.ActionTaken,
+                id_del_usuario_reportante = report.IdUser,
                 Id_del_usuario_reportado = report.IdReportedUser,
                 nombre = report.User.Name,
                 estado_de_Cuenta_del_usuario_reportado = report.UserReported.IdStateNavigation.Name
             };
 
             // Return a success response with the updated report information
-            return StatusCode(200, ManageResponse.SuccessfullWithObject("Data actualizada", response));
+            return StatusCode(200, ManageResponse.SuccessfullWithObject("Data actualizada " + message, response));
         }
     }
 }
