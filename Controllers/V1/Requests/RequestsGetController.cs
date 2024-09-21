@@ -55,16 +55,17 @@ public class RequestsGetController : ControllerBase
         var user = await _dbContext.Users.FindAsync(id);
 
         // Get the last requests of each type based on their status.
-        var lastAccepted = request.Where(r => r.IdStateRequest == 2).OrderByDescending(r => r.Id).FirstOrDefault();
+        var lastAccept = request.Where(r => r.IdStateRequest == 2).OrderByDescending(r => r.Id).FirstOrDefault();
         var lastPending = request.Where(r => r.IdStateRequest == 1).OrderByDescending(r => r.Id).FirstOrDefault();
         var lastCancelled = request.Where(r => r.IdStateRequest == 3).OrderByDescending(r => r.Id).FirstOrDefault();
         var lastSent = requestSent.Where(r => r.IdStateRequest == 1).OrderByDescending(r => r.Id).FirstOrDefault();
 
         // Count the number of requests based on their status.
-        var countAccepted = request.Count(r => r.IdStateRequest == 2);
+        var countReceivedAccept = request.Count(r => r.IdStateRequest == 2);
         var countReceived = request.Count(r => r.IdStateRequest == 1);
         var countCancelled = request.Count(r => r.IdStateRequest == 3);
         var countSent = requestSent.Count(r => r.IdStateRequest == 1);
+        var countSentAccept = requestSent.Count(r => r.IdStateRequest == 2);
 
         // Prepare the response object with user and request summary data.
         var response = new
@@ -73,11 +74,12 @@ public class RequestsGetController : ControllerBase
             NombreUsuario = $"{user?.Name} {user?.LastName}" ?? "Nombre no disponible",
             Solicitudes = new
             {
-                UltimaAceptada = $"{lastAccepted?.IdRequestingUserNavigation?.Name} {lastAccepted?.IdRequestingUserNavigation?.LastName}",
+                UltimaAceptada = $"{lastAccept?.IdRequestingUserNavigation?.Name} {lastAccept?.IdRequestingUserNavigation?.LastName}",
                 UltimaPendiente = $"{lastPending?.IdRequestingUserNavigation?.Name} {lastPending?.IdRequestingUserNavigation?.LastName}",
                 UltimaCancelada = $"{lastCancelled?.IdRequestingUserNavigation?.Name} {lastCancelled?.IdRequestingUserNavigation?.LastName}",
                 UltimoEnviado = $"{lastSent?.IdReceivingUserNavigation?.Name} {lastSent?.IdReceivingUserNavigation?.LastName}",
-                conteoAceptadas = countAccepted,
+                conteoConexiones = countReceivedAccept +countSentAccept,
+                conteoAceptadas = countSentAccept,
                 conteoPendientes = countReceived,
                 conteoCanceladas = countCancelled,
                 conteoEnviadas = countSent
@@ -85,7 +87,7 @@ public class RequestsGetController : ControllerBase
         };
 
         // Return a successful response with the user and request data.
-        return StatusCode(200, ManageResponse.SuccessfullWithObject("Datos encontrados correctamente.",  response));
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Datos encontrados correctamente.", response));
     }
 
     /// <summary>
@@ -116,6 +118,40 @@ public class RequestsGetController : ControllerBase
             .ToListAsync();
 
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", requestReceiving));
+    }
+
+    /// <summary>
+    /// Get connection data
+    /// </summary>
+    /// <remarks>
+    /// A Boolean is obtained from the search if two users are connected.
+    /// </remarks>
+    [HttpGet("ViewDetails")]
+    public async Task<IActionResult> GetViewDetails(int currectId, int requestId)
+    {
+        if (currectId == null || requestId == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorBadRequest);
+        }
+
+        var request = await _dbContext.Requests
+                                .Where(r => r.IdReceivingUser == currectId && r.IdRequestingUser == requestId)
+                                .FirstOrDefaultAsync();
+
+        if (request == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorNotFound());                   
+        }
+
+        var stateRequest = request.IdStateRequest;
+        bool response = true;
+
+        if(stateRequest == 2)
+        {
+            response = true;
+        }
+
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", response));
     }
 
     /// Checks if a user exists in the database.
