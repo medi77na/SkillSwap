@@ -136,13 +136,11 @@ public class RequestsGetController : ControllerBase
         }
 
         var stateRequest = request.IdStateRequest;
-        var response = true;
+        bool response = true;
 
         if(stateRequest == 2)
         {
             response = true;
-        }else{
-            response = false;
         }
 
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", response));
