@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SkillSwap.Dtos.Request;
 using SkillSwap.Models;
 
 namespace SkillSwap.Controllers.V1.Requests;
@@ -20,7 +21,7 @@ public class RequestsGetController : ControllerBase
     /// <remarks>
     /// Obtain data on the requests received by a user.
     /// </remarks>
-    [HttpGet("requests/{id}")]
+    [HttpGet("request/{id}")]
     public async Task<IActionResult> GetRequestById(int id)
     {
 
@@ -84,7 +85,37 @@ public class RequestsGetController : ControllerBase
         };
 
         // Return a successful response with the user and request data.
-        return StatusCode(200, ManageResponse.SuccessfullWithObject("Datos encontrados correctamente.", response));
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Datos encontrados correctamente.",  response));
+    }
+
+    /// <summary>
+    /// Get messages from requests
+    /// </summary>
+    /// <remarks>
+    /// Messages found in user requests are retrieved.
+    /// </remarks>
+    [HttpGet("messages{id}")]
+    public async Task<IActionResult> GetMessagesById(int id)
+    {
+        if (!await CheckExist(id))
+        {
+            return StatusCode(400, ManageResponse.ErrorBadRequest("User not found."));
+        }
+
+        var requestReceiving = await _dbContext.Requests
+            .Where(r => r.IdReceivingUser == id)
+            .Select(r => new RequestGetMessagesDTO
+            {
+                Id = r.Id,
+                Description = r.Description,
+                IdRequestingUser = r.IdRequestingUser,
+                IdReceivingUser = r.IdReceivingUser,
+                UserNameRequesting = $"{r.IdRequestingUserNavigation.Name} {r.IdRequestingUserNavigation.LastName}",
+                UserNameReceiving = $"{r.IdReceivingUserNavigation.Name} {r.IdReceivingUserNavigation.LastName}"
+            })
+            .ToListAsync();
+
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", requestReceiving));
     }
 
     /// Checks if a user exists in the database.
