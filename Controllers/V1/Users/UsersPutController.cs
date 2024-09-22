@@ -114,7 +114,7 @@ public class UsersPutController : ControllerBase
             message = "El estado de la cuenta ha sido habilitada";
 
         }
-        if (action.Equals("deshabilitar", StringComparison.OrdinalIgnoreCase))
+        else if (action.Equals("deshabilitar", StringComparison.OrdinalIgnoreCase))
         {
             // If the user is already disabled, return a success message without updating
             if (userFind.IdState == 2)
@@ -123,6 +123,8 @@ public class UsersPutController : ControllerBase
             }
              userFind.IdState = 2;
              message = "El estado de la cuenta ha sido deshabilitada";
+        }else{
+             return StatusCode(400, ManageResponse.ErrorBadRequest("Acción no reconocida."));
         }
 
         // Save changes to the database

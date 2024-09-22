@@ -32,5 +32,9 @@ public class UserPutAdminDTO
     public int? IdState { get; set; }
 
     public int? IdRol { get; set; }
-    
+
+    public DateOnly? SuspensionDate {get; set;} = null;
+
+    public DateOnly? ReactivationDate {get; set;} = null;
+
 }
