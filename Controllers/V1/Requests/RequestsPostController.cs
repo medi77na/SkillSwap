@@ -27,8 +27,8 @@ public class RequestsPostController : ControllerBase
     /// <remarks>
     /// method to create a request from one user to another user
     /// </remarks>
-    [HttpPost("/requests")]
-    public async Task<IActionResult> CreateRequest([FromBody] RequestPostDTO requestDTO)
+    [HttpPost("PostRequestCreate")]
+    public async Task<IActionResult> PostRequestCreate([FromBody] RequestPostDTO requestDTO)
     {
 
         // Validate the incoming request data using general validation logic.

@@ -18,8 +18,8 @@ namespace SkillSwap.Controllers.V1.Reports
             _context = context;
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteActionOnReport([FromRoute] int id)
+        [HttpDelete("DeleteReportById/{id}")]
+        public async Task<IActionResult> DeleteReportById(int id)
         {
             // Check if the report exists in the database.
             var find = await checkExistence(id);
