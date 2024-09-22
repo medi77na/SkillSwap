@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
 using SkillSwap.Validations;
@@ -72,6 +73,76 @@ public class UsersPutController : ControllerBase
 
         // Return a success message indicating that the user has been updated.
         return StatusCode(200, ManageResponse.Successfull("El usuario ha sido actulizado"));
+    }
+
+    [HttpPut("PutUserAction")]
+    public async Task<IActionResult> PutUserAction(int id, string action)
+    {
+
+        string message ="";
+
+        // Find the user by ID, including the user's state navigation
+        var userFind = await _dbContext.Users
+            .Include(r => r.IdStateNavigation)
+            .FirstOrDefaultAsync(i => i.Id == id);
+
+        // Prepare response object with current user information
+        var response = new
+        {
+            id = userFind.IdState,
+            nombre = userFind.Name,
+            estado = userFind.IdStateNavigation.Name
+        };
+
+        // If the user does not exist, return a 404 status with an error message
+        if (userFind == null)
+        {
+            return StatusCode(404, ManageResponse.ErrorNotFound());
+        }
+
+        // Update user state based on the action input ("habilitar" or "deshabilitar")
+
+        if (action.Equals("habilitar", StringComparison.OrdinalIgnoreCase))
+        {
+
+            // If the user is already enabled, return a success message without updating
+            if (userFind.IdState == 1)
+            {
+                return StatusCode(200, ManageResponse.SuccessfullWithObject("El usuario reportado ya se encuentra habilitado", response));
+            }
+            userFind.IdState = 1;
+            message = "El estado de la cuenta ha sido habilitada";
+
+        }
+        if (action.Equals("deshabilitar", StringComparison.OrdinalIgnoreCase))
+        {
+            // If the user is already disabled, return a success message without updating
+            if (userFind.IdState == 2)
+            {
+                return StatusCode(200, ManageResponse.SuccessfullWithObject("El usuario reportado ya se encuentra deshabilitado", response));
+            }
+             userFind.IdState = 2;
+             message = "El estado de la cuenta ha sido deshabilitada";
+        }
+
+        // Save changes to the database
+        await _dbContext.SaveChangesAsync();
+
+        // Retrieve updated user information
+        var userFind2 = await _dbContext.Users
+            .Include(r => r.IdStateNavigation)
+            .FirstOrDefaultAsync(i => i.Id == id);
+
+        // Prepare response object with updated user information
+        response = new
+        {
+            id = userFind2.IdState,
+            nombre = userFind2.Name,
+            estado = userFind2.IdStateNavigation.Name
+        };
+
+        // Return a 200 status with a success message and user details.
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Cuenta suspendida con éxito", response));
     }
 
     /// Checks if a user exists based on their ID.
