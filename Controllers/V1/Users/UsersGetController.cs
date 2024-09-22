@@ -84,7 +84,9 @@ public class UsersGetController : ControllerBase
              Category = u.Ability != null ? u.Ability.Category : "No category abilities",
              Abilities = u.Ability != null ? u.Ability.Abilities : "No abilities",
              IdState = u.IdState,
-             IdRol = u.IdRol
+             IdRol = u.IdRol,
+             SuspensionDate = u.SuspensionDate,
+            ReactivationDate = u.ReactivationDate
          })
         .ToListAsync();
 
@@ -139,52 +141,6 @@ public class UsersGetController : ControllerBase
 
         // Return a successful response with the user data.
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", getUser));
-    }
-
-
-    /// <summary>
-    /// Get user by Id for admin
-    /// </summary>
-    /// <remarks>
-    /// Get a specific user by their id for admin
-    /// </remarks>
-    [HttpGet("Admin/{id}")]
-    public async Task<IActionResult> GetByUserFromAdmin(int id)
-    {
-        // Query the user from the database by ID and include their related abilities.
-        var userFinded = await _dbContext.Users
-            .Include(r => r.Ability)
-            .FirstOrDefaultAsync(r => r.Id == id);
-
-        // If the user is not found, return a 404 status code with a not-found error message.
-        if (userFinded == null)
-        {
-            return StatusCode(404, ManageResponse.ErrorNotFound());
-        }
-
-        // Create a response object with detailed information about the user, including profile and abilities.
-        var response = new
-        {
-            Email = userFinded.Email,
-            Password = userFinded.Password,
-            Name = userFinded.Name,
-            LastName = userFinded.LastName,
-            Birthdate = userFinded.Birthdate,
-            Description = userFinded.Description,
-            JobTitle = userFinded.JobTitle,
-            UrlLinkedin = userFinded.UrlLinkedin,
-            UrlGithub = userFinded.UrlGithub,
-            UrlBehance = userFinded.UrlBehance,
-            UrlImage = userFinded.UrlImage,
-            PhoneNumber = userFinded.PhoneNumber,
-            Category = userFinded.Ability.Category,
-            Abilities = userFinded.Ability.Abilities,
-            IdState = userFinded.IdState,
-            IdRol = userFinded.IdRol
-        };
-
-        // Return a 200 status code with a success message and the user profile data.
-        return StatusCode(200, ManageResponse.SuccessfullWithObject("El usuario ha sido encontrado", response));
     }
 
 
