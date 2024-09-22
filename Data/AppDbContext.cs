@@ -199,6 +199,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(30)
                 .HasColumnName("phone_number");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             entity.Property(e => e.UrlImage)
                 .HasMaxLength(100)
                 .HasColumnName("url_image");
