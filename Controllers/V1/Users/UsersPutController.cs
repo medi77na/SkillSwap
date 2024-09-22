@@ -71,7 +71,7 @@ public class UsersPutController : ControllerBase
         await _dbContext.SaveChangesAsync();
 
         // Return a success message indicating that the user has been updated.
-        return StatusCode(200, ManageResponse.Successfull("El usuario ha sido actulizado"));
+        return StatusCode(200, ManageResponse.Successfull("El usuario ha sido actualizado"));
     }
 
     /// Checks if a user exists based on their ID.
