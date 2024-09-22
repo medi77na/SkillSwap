@@ -20,8 +20,8 @@ namespace SkillSwap.Controllers.V1.Reports
         }
 
         // PUT action for updating the status of a report
-        [HttpPut("PutActionOnReport")]
-        public async Task<IActionResult> PutActionOnReport([FromBody] ReportActionDTO reportDTO)
+        [HttpPut("PutReportByAction")]
+        public async Task<IActionResult> PutReportByAction([FromBody] ReportActionDTO reportDTO)
         {
             string message = "";
             if (reportDTO.Id == default(int) || reportDTO.ActionTaken == null || reportDTO.IdReportedUser == default(int) || reportDTO.IdUser == default(int))

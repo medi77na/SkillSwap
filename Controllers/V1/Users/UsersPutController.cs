@@ -22,7 +22,7 @@ public class UsersPutController : ControllerBase
     }
 
     /// Updates a user based on the provided user ID.
-    [HttpPut("{id}")]
+    [HttpPut("PutUserByUser")]
     public async Task<IActionResult> PutByUser(int id, UserPostDTO userDTO)
     {
 
@@ -52,7 +52,7 @@ public class UsersPutController : ControllerBase
     }
 
     /// Updates a user based on the provided user ID from the admin perspective.
-    [HttpPut("Admin/{id}")]
+    [HttpPut("PutUserByUserAdmin")]
     public async Task<IActionResult> PutByUserFromAdmin(int id, UserPutAdminDTO userDTO)
     {
 
@@ -75,8 +75,8 @@ public class UsersPutController : ControllerBase
         return StatusCode(200, ManageResponse.Successfull("El usuario ha sido actualizado"));
     }
 
-    [HttpPut("PutUserAction")]
-    public async Task<IActionResult> PutUserAction(int id, string action)
+    [HttpPut("PutUserByAction")]
+    public async Task<IActionResult> PutUserByAction(int id, string action)
     {
 
         string message ="";

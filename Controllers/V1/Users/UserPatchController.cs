@@ -18,8 +18,8 @@ namespace SkillSwap.Controllers.V1.Users
             _dbContext = dbContext;
         }
 
-        [HttpPatch("PatchSuspendUserAccount")]
-        public async Task<IActionResult> PatchSuspendUserAccount(int id)
+        [HttpPatch("PatchUserAccountSuspend")]
+        public async Task<IActionResult> PatchUserAccountSuspend(int id)
         {
             // Find the user by ID
             var userFind = await _dbContext.Users.FindAsync(id);

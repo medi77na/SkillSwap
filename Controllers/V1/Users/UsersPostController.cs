@@ -21,8 +21,8 @@ public class UsersPostController : ControllerBase
     }
 
     // User Creation
-    [HttpPost]
-    public async Task<IActionResult> Register([FromBody] UserPostDTO userDTO)
+    [HttpPost("PostUserCreate")]
+    public async Task<IActionResult> PostUserCreate([FromBody] UserPostDTO userDTO)
     {
 
         var response = await UserValidation.GeneralValidationAsync(_dbContext, userDTO);

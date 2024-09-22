@@ -27,8 +27,8 @@ public class AuthController : ControllerBase
     }
 
     // User Login
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] AuthDTO userLoginPostDTO)
+    [HttpPost("PostAuthLogin")]
+    public async Task<IActionResult> PostAuthLogin([FromBody] AuthDTO userLoginPostDTO)
     {
         // Check if the request body or essential fields (Email and Password) are null or empty.
         if (userLoginPostDTO == null || string.IsNullOrEmpty(userLoginPostDTO.Email) || string.IsNullOrEmpty(userLoginPostDTO.Password))

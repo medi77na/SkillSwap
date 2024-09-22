@@ -17,8 +17,8 @@ public class UsersDeleteController : ControllerBase
     }
 
     // Endpoint to delete a user by their ID
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(int id)
+    [HttpDelete("DeleteUserById")]
+    public async Task<IActionResult> DeleteUserById(int id)
     {
         // Find the user in the database by their ID
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);

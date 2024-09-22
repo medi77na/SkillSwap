@@ -21,8 +21,8 @@ namespace SkillSwap.Controllers.V1.Admin
             _dbContext = dbContext;
         }
 
-        [HttpGet("Reports")]
-        public async Task<IActionResult> GetReports()
+        [HttpGet("GetReportsAll")]
+        public async Task<IActionResult> GetReportsAll()
         {
             // Main query to obtain reports from the database.
             var reports = await _dbContext.Reports
@@ -46,7 +46,7 @@ namespace SkillSwap.Controllers.V1.Admin
             return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", reportDtos));
         }
 
-        [HttpGet("Reports/{id}")]
+        [HttpGet("GetReportById/{id}")]
         public async Task<IActionResult> GetReportById(int id)
         {
             // Query to obtain the report from the database based on the provided ID.
