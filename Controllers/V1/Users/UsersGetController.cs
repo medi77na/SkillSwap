@@ -222,7 +222,9 @@ public class UsersGetController : ControllerBase
             Category = userFinded.Ability.Category,
             Abilities = userFinded.Ability.Abilities,
             IdState = userFinded.IdState,
-            IdRol = userFinded.IdRol
+            IdRol = userFinded.IdRol,
+            SuspensionDate = userFinded.SuspensionDate,
+            ReactivationDate = userFinded.ReactivationDate
         };
 
         // Return a 200 status code with a success message and the user profile data.

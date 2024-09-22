@@ -63,9 +63,15 @@ namespace SkillSwap.Controllers.V1.Reports
                 {
                     message = ", El usuario reportado ya se encuentra suspendido";
                 }
-                report.IdState = 2;
-                report.UserReported.IdState = 3;
-                report.ActionTaken = "usuario suspendido";
+                else
+                {
+                    report.IdState = 2;
+                    report.UserReported.IdState = 3;
+                    report.ActionTaken = "usuario suspendido";
+                    report.UserReported.SuspensionDate = DateOnly.FromDateTime(DateTime.Now);
+                    report.UserReported.ReactivationDate = (report.UserReported.SuspensionDate ?? DateOnly.FromDateTime(DateTime.Now)).AddDays(5);
+                }
+
             }
             else if (reportDTO.ActionTaken.Equals("habilitar", StringComparison.OrdinalIgnoreCase))
             {
@@ -73,9 +79,35 @@ namespace SkillSwap.Controllers.V1.Reports
                 {
                     message = ", El usuario reportado ya se encuentra habilitado";
                 }
-                report.IdState = 3;
-                report.UserReported.IdState = 1;
-                report.ActionTaken = "usuario habilitado";
+                else
+                {
+                    if (DateOnly.FromDateTime(DateTime.Now) > report.UserReported.ReactivationDate)
+                    {
+                        report.IdState = 3;
+                        report.UserReported.IdState = 1;
+                        report.ActionTaken = "usuario habilitado";
+                        report.UserReported.SuspensionDate = null;
+                        report.UserReported.ReactivationDate = null;
+                    }
+                    else
+                    {
+                        return StatusCode(200, ManageResponse.SuccessfullWithObject("Lo sentimos pero la cuenta sigue suspendida", new
+                        {
+                            Id_del_reporte = report.Id,
+                            Estado = report.StateReport.Name,
+                            AccionTomada = report.ActionTaken,
+                            id_del_usuario_reportante = report.IdUser,
+                            Id_del_usuario_reportado = report.IdReportedUser,
+                            nombre = report.User.Name,
+                            estado_de_Cuenta_del_usuario_reportado = report.UserReported.IdStateNavigation.Name,
+                            fecha_de_suspension = report.UserReported.SuspensionDate,
+                            fecha_de_reactivacion = report.UserReported.ReactivationDate
+                        }));
+                    }
+
+
+                }
+
             }
             else if (reportDTO.ActionTaken.Equals("deshabilitar", StringComparison.OrdinalIgnoreCase))
             {
@@ -83,9 +115,14 @@ namespace SkillSwap.Controllers.V1.Reports
                 {
                     message = ", El usuario reportado ya se encuentra deshabilitado";
                 }
-                report.IdState = 3;
-                report.UserReported.IdState = 2;
-                report.ActionTaken = "usuario deshabilitado";
+                else
+                {
+                    report.IdState = 3;
+                    report.UserReported.IdState = 2;
+                    report.ActionTaken = "usuario deshabilitado";
+                    report.UserReported.SuspensionDate = null;
+                    report.UserReported.ReactivationDate = null;
+                }
             }
             else
             {
@@ -111,7 +148,9 @@ namespace SkillSwap.Controllers.V1.Reports
                 id_del_usuario_reportante = report.IdUser,
                 Id_del_usuario_reportado = report.IdReportedUser,
                 nombre = report.User.Name,
-                estado_de_Cuenta_del_usuario_reportado = report.UserReported.IdStateNavigation.Name
+                estado_de_Cuenta_del_usuario_reportado = report.UserReported.IdStateNavigation.Name,
+                fecha_de_suspension = report.UserReported.SuspensionDate,
+                fecha_de_reactivacion = report.UserReported.ReactivationDate
             };
 
             // Return a success response with the updated report information

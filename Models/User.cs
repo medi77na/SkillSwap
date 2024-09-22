@@ -35,6 +35,10 @@ public partial class User
     
     public DateOnly CreatedAt{ get; set; }
 
+    public DateOnly? SuspensionDate {get; set;}
+
+    public DateOnly? ReactivationDate {get; set;}
+
     public int? IdState { get; set; }
 
     public int? IdRol { get; set; }
