@@ -2,6 +2,7 @@ namespace SkillSwap.Dtos.User;
 public class UserPutAdminDTO
 {
 
+    public int Id { get; set; }
     public string? Name { get; set; }
 
     public string? LastName { get; set; }
@@ -28,9 +29,9 @@ public class UserPutAdminDTO
 
     public string? UrlBehance { get; set; }
 
-    public int? IdState { get; set; }
+    public int? IdStateUser { get; set; }
 
-    public int? IdRol { get; set; }
+    public int? IdRoleUser { get; set; }
 
     public DateOnly? SuspensionDate {get; set;} = null;
 
