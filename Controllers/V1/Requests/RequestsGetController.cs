@@ -21,7 +21,7 @@ public class RequestsGetController : ControllerBase
     /// <remarks>
     /// Obtain data on the requests received by a user.
     /// </remarks>
-    [HttpGet("request/{id}")]
+    [HttpGet("GetRequestById/{id}")]
     public async Task<IActionResult> GetRequestById(int id)
     {
 
@@ -96,8 +96,8 @@ public class RequestsGetController : ControllerBase
     /// <remarks>
     /// Messages found in user requests are retrieved.
     /// </remarks>
-    [HttpGet("messages{id}")]
-    public async Task<IActionResult> GetMessagesById(int id)
+    [HttpGet("GetRequestMessagesById/{id}")]
+    public async Task<IActionResult> GetRequestMessagesById(int id)
     {
         if (!await CheckExist(id))
         {
@@ -126,8 +126,8 @@ public class RequestsGetController : ControllerBase
     /// <remarks>
     /// A Boolean is obtained from the search if two users are connected.
     /// </remarks>
-    [HttpGet("ViewDetails")]
-    public async Task<IActionResult> GetViewDetails(int currectId, int requestId)
+    [HttpGet("GetRequestViewDetails")]
+    public async Task<IActionResult> GetRequestViewDetails(int currectId, int requestId)
     {
         if (currectId == null || requestId == null)
         {

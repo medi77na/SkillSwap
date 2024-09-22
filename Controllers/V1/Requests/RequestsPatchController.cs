@@ -24,8 +24,8 @@ public class RequestsPatchController : ControllerBase
     /// <remarks>
     /// The status of the request is updated to accepted or cancelled.
     /// </remarks>
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> PatchStateRequest(int id, [FromBody] RequestPatchDTO userDTO)
+    [HttpPatch("PatchRequestState/{id}")]
+    public async Task<IActionResult> PatchRequestState(int id, [FromBody] RequestPatchDTO userDTO)
     {
         if (!await CheckExist(id))
         {

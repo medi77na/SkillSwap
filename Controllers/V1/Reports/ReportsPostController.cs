@@ -20,8 +20,8 @@ public class ReportsPostController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateReport([FromBody] ReportDTO reportDTO)
+    [HttpPost("PostReportCreate")]
+    public async Task<IActionResult> PostReportCreate([FromBody] ReportDTO reportDTO)
     {
         // Validate the incoming report data using general validation logic
         var response = await ReportValidation.GeneralValidationAsync(reportDTO);
