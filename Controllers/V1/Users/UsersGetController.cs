@@ -258,6 +258,23 @@ public class UsersGetController : ControllerBase
 
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", userDtos));
     }
+    [HttpGet("GetUserSortDate")]
+    public async Task<IActionResult> GetUserSortedCreated()
+    {
+        var users = await _dbContext.Users
+        .Include(a => a.Ability)
+        .Select(u => new
+        {
+            Id = u.Id,
+            Name = $"{u.Name} {u.LastName}",
+            UrlImage = u.UrlImage,
+            Category = u.Ability.Category,
+            CreatedAt = u.CreatedAt
+        }).OrderByDescending(u => u.CreatedAt)
+        .ToListAsync();
+
+        return Ok(users);
+    }
 
 
 }

@@ -36,7 +36,7 @@ namespace SkillSwap.Controllers.V1.Users
                 return StatusCode(200, ManageResponse.Successfull("La cuenta ya se encuentra suspendida"));
             }
 
-             // If the user account is already suspended, return a 200 status with a success message.
+            // If the user account is already suspended, return a 200 status with a success message.
             userFind.IdState = 3;
 
             // Create a response object with user information.
@@ -52,5 +52,8 @@ namespace SkillSwap.Controllers.V1.Users
 
             return StatusCode(200, ManageResponse.SuccessfullWithObject("Cuenta suspendida con éxito", response));
         }
+
+
+
     }
 }
