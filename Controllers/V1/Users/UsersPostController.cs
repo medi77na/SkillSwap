@@ -56,6 +56,7 @@ public class UsersPostController : ControllerBase
         var user = _mapper.Map<User>(userDTO);
 
         // Set additional properties not included in the DTO
+        user.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
         user.IdState = 1;
         user.IdRol = 2;
         user.IdQualification = qualification.Id;

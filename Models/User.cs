@@ -32,6 +32,8 @@ public partial class User
     public string? UrlImage { get; set; }
 
     public string? PhoneNumber { get; set; }
+    
+    public DateOnly CreatedAt{ get; set; }
 
     public int? IdState { get; set; }
 
