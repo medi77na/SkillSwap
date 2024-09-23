@@ -38,6 +38,9 @@ public class UsersPutController : ControllerBase
     public async Task<IActionResult> PutByUser(int id, UserPostDTO userDTO)
     {
 
+        // Attempt to find the user in the database by ID.
+        var userFinded = await _dbContext.Users.Include(e => e.Ability).FirstOrDefaultAsync(i => i.Id == id);
+
         // Check if the user exists in the database by ID
         if (!await CheckExist(id))
         {
@@ -45,13 +48,16 @@ public class UsersPutController : ControllerBase
         }
 
         // Validate the user data provided in the DTO.
-        var userFinded = await UserPutValidation.GeneralValidationAsync(_dbContext, userDTO);
+         var validation = await UserPutValidation.GeneralValidationAsync(_dbContext, userDTO);
 
         // If validation fails, return a 400 Bad Request response.
-        if (userFinded != "correcto")
+        if (validation != "correcto")
         {
-            return StatusCode(400, ManageResponse.ErrorBadRequest(userFinded));
+            return StatusCode(400, ManageResponse.ErrorBadRequest(validation));
         }
+
+        userFinded.Ability.Category = userDTO.Category;
+        userFinded.Ability.Abilities = userDTO.Abilities;
 
         // Map the updated data from the DTO to the found user entity.
         _mapper.Map(userDTO, userFinded);
