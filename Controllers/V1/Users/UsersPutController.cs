@@ -65,6 +65,13 @@ public class UsersPutController : ControllerBase
             return StatusCode(404, ManageResponse.ErrorNotFound());
         }
 
+        if (userDTO.IdStateUser == 3)
+        {
+            userDTO.SuspensionDate = DateOnly.FromDateTime(DateTime.Now);
+            userDTO.ReactivationDate = (userFinded.SuspensionDate ?? DateOnly.FromDateTime(DateTime.Now)).AddDays(5);
+        }
+        
+
         // Map the updated data from the DTO to the found user entity.
         _mapper.Map(userDTO, userFinded);
 
@@ -79,7 +86,7 @@ public class UsersPutController : ControllerBase
     public async Task<IActionResult> PutUserByAction(int id, string action)
     {
 
-        string message ="";
+        string message = "";
 
         // Find the user by ID, including the user's state navigation
         var userFind = await _dbContext.Users
@@ -121,10 +128,12 @@ public class UsersPutController : ControllerBase
             {
                 return StatusCode(200, ManageResponse.SuccessfullWithObject("El usuario reportado ya se encuentra deshabilitado", response));
             }
-             userFind.IdState = 2;
-             message = "El estado de la cuenta ha sido deshabilitada";
-        }else{
-             return StatusCode(400, ManageResponse.ErrorBadRequest("Acción no reconocida."));
+            userFind.IdState = 2;
+            message = "El estado de la cuenta ha sido deshabilitada";
+        }
+        else
+        {
+            return StatusCode(400, ManageResponse.ErrorBadRequest("Acción no reconocida."));
         }
 
         // Save changes to the database
