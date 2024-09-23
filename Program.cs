@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 Env.Load();
 
+builder.Services.AddSignalR();
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllers();
 
@@ -103,6 +104,8 @@ var app = builder.Build();
 
 // Use the CORS policy
 app.UseCors("AllowSpecificOrigin");
+
+app.MapHub<ChatHub>("/chathub");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
