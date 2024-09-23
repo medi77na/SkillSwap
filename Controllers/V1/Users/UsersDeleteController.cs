@@ -16,7 +16,19 @@ public class UsersDeleteController : ControllerBase
         _dbContext = dbContext;
     }
 
-    // Endpoint to delete a user by their ID
+    /// <summary>
+    /// Delete a user by their ID
+    /// </summary>
+    /// <remarks>
+    /// Endpoint to delete a user from the system based on their unique ID.
+    /// </remarks>
+    /// <param name="id">The ID of the user to be deleted</param>
+    /// <returns>
+    /// Returns an HTTP status code:
+    /// - 200 OK: If the user was successfully deleted.
+    /// - 404 Not Found: If the user does not exist.
+    /// The response includes a success message or an error message.
+    /// </returns>
     [HttpDelete("DeleteUserById")]
     public async Task<IActionResult> DeleteUserById(int id)
     {
@@ -26,16 +38,16 @@ public class UsersDeleteController : ControllerBase
         // If the user is not found, return a 404 Not Found response.
         if (user == null)
         {
-            return StatusCode(404,ManageResponse.ErrorNotFound());
+            return StatusCode(404, ManageResponse.ErrorNotFound());
         }
 
         // Remove the user from the database context.
         _dbContext.Users.Remove(user);
 
-         // Save the changes to the database.
+        // Save the changes to the database.
         await _dbContext.SaveChangesAsync();
 
         // Return a success message indicating the user has been deleted.
-        return StatusCode(200,ManageResponse.Successfull($"Usuario con id {id} ha sido eliminado."));
+        return StatusCode(200, ManageResponse.Successfull($"Usuario con id {id} ha sido eliminado."));
     }
 }
