@@ -47,6 +47,10 @@ public partial class User
     
     public int? IdAbility { get; set; }
 
+    public string? PasswordResetToken {get; set; }
+
+    public DateTime? PasswordResetTokenExpiry {get; set; }
+
     public Ability? Ability {get;set;}
 
     public Qualification? Qualification { get; set; }

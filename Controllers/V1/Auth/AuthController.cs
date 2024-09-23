@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SkillSwap.Dtos.User;
+using SkillSwap.Interfaces;
 using SkillSwap.Models;
 
 namespace SkillSwap.Controllers.V1.Auth;
@@ -17,11 +18,13 @@ public class AuthController : ControllerBase
     private readonly AppDbContext _dbContext;
     private readonly IConfiguration _configuration;
     private readonly PasswordHasher<User> _passwordHasher;
+    private readonly IEmailService _emailService;
 
     //Constructor
-    public AuthController(AppDbContext dbContext, IConfiguration configuration)
+    public AuthController(AppDbContext dbContext, IEmailService emailService, IConfiguration configuration)
     {
         _dbContext = dbContext;
+        _emailService = emailService;
         _configuration = configuration;
         _passwordHasher = new PasswordHasher<User>();
     }
@@ -40,7 +43,6 @@ public class AuthController : ControllerBase
     /// A 401 Unauthorized response if the user does not exist, with a message indicating "Autenticación requerida."
     /// A 404 Not Found response if the password is incorrect, with a message indicating "Contraseña incorrecta."
     /// </returns>
-    
     [HttpPost("PostAuthLogin")]
     public async Task<IActionResult> PostAuthLogin([FromBody] AuthDTO userLoginPostDTO)
     {
@@ -76,6 +78,79 @@ public class AuthController : ControllerBase
         };
 
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Éxito", response));
+    }
+
+    /// <summary>
+    /// Request a password reset link via email
+    /// </summary>
+    /// <remarks>
+    /// This endpoint allows a user to request a password reset link. If the email exists in the system,
+    /// a reset token will be generated and sent to the user's email.
+    /// </remarks>
+    /// <param name="model">An object containing the user's email address.</param>
+    /// <returns>
+    /// Returns an HTTP status code:
+    /// - 200 OK: If the reset link is successfully sent.
+    /// - 404 Not Found: If no user is found with the provided email address.
+    /// </returns>
+    [HttpPost("RequestEmail")]
+    public async Task<IActionResult> ForgotPassword([FromBody] UserRequestEmail model)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+        if (user == null)
+            return NotFound("No se encontró un usuario con ese correo.");
+
+        // Generar el token de restauración
+        var resetToken = GenerateJwtToken();
+        user.PasswordResetToken = resetToken;
+        user.PasswordResetTokenExpiry = DateTime.Now.AddHours(24);
+
+        await _dbContext.SaveChangesAsync();
+
+
+        // Enviar el correo
+        var resetLink = $"{Request.Scheme}://{Request.Host}/reset-password?token={resetToken}";
+        await _emailService.SendPasswordResetEmail(user.Email, resetLink);
+
+        return Ok("El enlace de restauración ha sido enviado al correo.");
+    }
+
+    /// <summary>
+    /// Reset a user's password using a valid reset token
+    /// </summary>
+    /// <remarks>
+    /// This endpoint allows a user to reset their password by providing a valid reset token.
+    /// The token must not be expired, and the new password will be hashed before being stored.
+    /// </remarks>
+    /// <param name="model">An object containing the reset token and the new password.</param>
+    /// <returns>
+    /// Returns an HTTP status code:
+    /// - 200 OK: If the password is successfully reset.
+    /// - 400 Bad Request: If the token is invalid or expired.
+    /// </returns>
+    [HttpPost("ResetPassword")]
+    public async Task<IActionResult> ResetPassword([FromBody] UserRequestPassword model)
+    {
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.PasswordResetToken == model.Token && u.PasswordResetTokenExpiry > DateTime.Now);
+
+        if (user == null)
+        {
+            return BadRequest("Token inválido o expirado.");
+        }
+
+
+        // Create PasswordHasher<User> instance
+        var passwordHasher = new PasswordHasher<User>();
+
+        // Hash the password and assign it to the user's Password property
+        user.Password = passwordHasher.HashPassword(user, model.NewPassword);
+        user.PasswordResetToken = null;
+        user.PasswordResetTokenExpiry = null;
+
+        await _dbContext.SaveChangesAsync();
+
+        return Ok("Contraseña restablecida correctamente.");
     }
 
     // Generate JWT token for authenticated users
