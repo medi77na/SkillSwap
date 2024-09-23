@@ -19,8 +19,15 @@ public class RequestsGetController : ControllerBase
     /// Retrieves requests associated with a specific user.
     /// </summary>
     /// <remarks>
-    /// Obtain data on the requests received by a user.
+    /// Obtain data on the requests received and sent by a user.
     /// </remarks>
+    /// <param name="id">The ID of the user whose requests are being retrieved.</param>
+    /// <returns>
+    /// A 200 OK response with user and request summary data if requests are found.
+    /// A 400 Bad Request response if the user is not found.
+    /// A 404 Not Found response if no requests are found.
+    /// </returns>
+
     [HttpGet("GetRequestById/{id}")]
     public async Task<IActionResult> GetRequestById(int id)
     {
@@ -78,7 +85,7 @@ public class RequestsGetController : ControllerBase
                 UltimaPendiente = $"{lastPending?.IdRequestingUserNavigation?.Name} {lastPending?.IdRequestingUserNavigation?.LastName}",
                 UltimaCancelada = $"{lastCancelled?.IdRequestingUserNavigation?.Name} {lastCancelled?.IdRequestingUserNavigation?.LastName}",
                 UltimoEnviado = $"{lastSent?.IdReceivingUserNavigation?.Name} {lastSent?.IdReceivingUserNavigation?.LastName}",
-                conteoConexiones = countReceivedAccept +countSentAccept,
+                conteoConexiones = countReceivedAccept + countSentAccept,
                 conteoAceptadas = countSentAccept,
                 conteoPendientes = countReceived,
                 conteoCanceladas = countCancelled,
@@ -91,11 +98,17 @@ public class RequestsGetController : ControllerBase
     }
 
     /// <summary>
-    /// Get messages from requests
+    /// Get messages from requests.
     /// </summary>
     /// <remarks>
     /// Messages found in user requests are retrieved.
     /// </remarks>
+    /// <param name="id">The ID of the user whose request messages are being retrieved.</param>
+    /// <returns>
+    /// A 200 OK response with the retrieved request messages if found.
+    /// A 400 Bad Request response if the user is not found.
+    /// </returns>
+    
     [HttpGet("GetRequestMessagesById/{id}")]
     public async Task<IActionResult> GetRequestMessagesById(int id)
     {
@@ -121,11 +134,18 @@ public class RequestsGetController : ControllerBase
     }
 
     /// <summary>
-    /// Get connection data
+    /// Get connection data.
     /// </summary>
     /// <remarks>
     /// A Boolean is obtained from the search if two users are connected.
     /// </remarks>
+    /// <param name="currectId">The ID of the current user.</param>
+    /// <param name="requestId">The ID of the requesting user.</param>
+    /// <returns>
+    /// A 200 OK response with a Boolean indicating the connection status if found.
+    /// A 400 Bad Request response if any required parameters are missing.
+    /// </returns>
+    
     [HttpGet("GetRequestViewDetails")]
     public async Task<IActionResult> GetRequestViewDetails(int currectId, int requestId)
     {
@@ -141,7 +161,7 @@ public class RequestsGetController : ControllerBase
         bool response;
 
         response = request != null && request.IdStateRequest == 2 ? true : false;
-        
+
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", response));
     }
 
