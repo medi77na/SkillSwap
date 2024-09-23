@@ -17,13 +17,19 @@ public class RequestsPatchController : ControllerBase
         _dbContext = dbContext;
     }
 
-
     /// <summary>
-    /// ACTUALIZE APPLICATION STATUS
+    /// Actualize application status
     /// </summary>
     /// <remarks>
     /// The status of the request is updated to accepted or cancelled.
     /// </remarks>
+    /// <param name="id">The ID of the request to be updated.</param>
+    /// <param name="userDTO">The DTO containing the new state information for the request.</param>
+    /// <returns>
+    /// A 200 OK response if the request status was updated successfully.
+    /// A 400 Bad Request response if the user is not found or if the validation fails.
+    /// </returns>
+    
     [HttpPatch("PatchRequestState/{id}")]
     public async Task<IActionResult> PatchRequestState(int id, [FromBody] RequestPatchDTO userDTO)
     {
