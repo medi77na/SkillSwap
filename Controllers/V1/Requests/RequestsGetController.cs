@@ -138,19 +138,10 @@ public class RequestsGetController : ControllerBase
                                 .Where(r => r.IdReceivingUser == currectId && r.IdRequestingUser == requestId)
                                 .FirstOrDefaultAsync();
 
-        if (request == null)
-        {
-            return StatusCode(404, ManageResponse.ErrorNotFound());                   
-        }
+        bool response;
 
-        var stateRequest = request.IdStateRequest;
-        bool response = true;
-
-        if(stateRequest == 2)
-        {
-            response = true;
-        }
-
+        response = request != null && request.IdStateRequest == 2 ? true : false;
+        
         return StatusCode(200, ManageResponse.SuccessfullWithObject("Data encontrada", response));
     }
 
