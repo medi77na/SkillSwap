@@ -12,51 +12,51 @@ public static class UserValidation
         // Check if email is valid
         if (!DataValidator.ValidateEmail(userDTO.Email))
         {
-            return "incorrect email";
+            return "Correo inválido";
         }
 
         //Check if password is valid
         if (!DataValidator.ValidatePassword(userDTO.Password))
         {
-            return "incorrect password";
+            return "Contraseña inválida";
         }
 
         //Check if name is valid
         if (!DataValidator.ValidateLettersOnly(userDTO.Name))
         {
-            return "incorrect username";
+            return "Nombre inválido";
         }
 
         //Check if lastName is valid
         if (!DataValidator.ValidateLettersOnly(userDTO.LastName))
         {
-            return "incorrect lastname";
+            return "Apellido inválido";
         }
 
         //Check if email is already registered
         if (await DataValidator.LookForRepeatEmail(_dbContext, userDTO.Email))
         {
-            return "email already registered";
+            return "Correo es requerido";
         }
 
         //Check if birthday is not null
         if (!DataValidator.ValidateContainNotNull(userDTO.Birthdate))
         {
-            return "birthday is required";
+            return "Fecha de nacimiento es requerida";
         }
 
         //Check if category is not null
         if (!DataValidator.ValidateContainNotNull(userDTO.Category))
         {
-            return "category is required";
+            return "Las categorias son requeridas";
         }
 
         //Check if skills is not null
         if (!DataValidator.ValidateContainNotNull(userDTO.Abilities))
         {
-            return "abilities is required";
+            return "Las habilidades son requeridas";
         }
 
-        return "correct user";
+        return "correcto";
     }
 }
