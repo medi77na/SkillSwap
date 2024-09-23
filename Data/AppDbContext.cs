@@ -34,10 +34,10 @@ public partial class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-            RoleSeeder.Seed(modelBuilder);
-            StateRequestSeeder.Seed(modelBuilder);
-            StateUserSeeder.Seed(modelBuilder);
-            StateReportSeeder.Seed(modelBuilder);
+        RoleSeeder.Seed(modelBuilder);
+        StateRequestSeeder.Seed(modelBuilder);
+        StateUserSeeder.Seed(modelBuilder);
+        StateReportSeeder.Seed(modelBuilder);
 
         modelBuilder
             .UseCollation("utf8_general_ci")
@@ -199,9 +199,15 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(30)
                 .HasColumnName("phone_number");
+            entity.Property(e => e.PasswordResetToken)
+                .HasMaxLength(255)
+                .HasColumnName("password_reset_token");
+            entity.Property(e => e.PasswordResetTokenExpiry)
+                .HasMaxLength(65)
+                .HasColumnName("password_reset_token_expiry");
             entity.Property(e => e.CreatedAt).HasColumnName("created_at");
-            entity.Property( e => e.SuspensionDate).HasColumnName("suspension_date");
-            entity.Property( e => e.ReactivationDate).HasColumnName("reactivation_date");
+            entity.Property(e => e.SuspensionDate).HasColumnName("suspension_date");
+            entity.Property(e => e.ReactivationDate).HasColumnName("reactivation_date");
             entity.Property(e => e.UrlImage)
                 .HasMaxLength(100)
                 .HasColumnName("url_image");
@@ -222,7 +228,7 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.IdStateNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdState)
                 .HasConstraintName("Users_ibfk_1");
-                
+
             entity.HasOne(u => u.Ability)
                 .WithOne(up => up.User)
                 .HasForeignKey<User>(up => up.IdAbility)

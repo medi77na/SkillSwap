@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkillSwap.Models;
 
@@ -11,9 +12,11 @@ using SkillSwap.Models;
 namespace SkillSwap.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240923173702_Some_fields_are_updated_for_users")]
+    partial class Some_fields_are_updated_for_users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -415,8 +418,8 @@ namespace SkillSwap.Migrations
                         .HasColumnName("password");
 
                     b.Property<string>("PasswordResetToken")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(175)
+                        .HasColumnType("varchar(175)")
                         .HasColumnName("password_reset_token");
 
                     b.Property<DateTime?>("PasswordResetTokenExpiry")
