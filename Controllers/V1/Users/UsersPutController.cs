@@ -89,6 +89,13 @@ public class UsersPutController : ControllerBase
             return StatusCode(404, ManageResponse.ErrorNotFound());
         }
 
+        if (userDTO.IdStateUser == 3)
+        {
+            userDTO.SuspensionDate = DateOnly.FromDateTime(DateTime.Now);
+            userDTO.ReactivationDate = (userFinded.SuspensionDate ?? DateOnly.FromDateTime(DateTime.Now)).AddDays(5);
+        }
+        
+
         // Map the updated data from the DTO to the found user entity.
         _mapper.Map(userDTO, userFinded);
 

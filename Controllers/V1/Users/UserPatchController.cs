@@ -44,8 +44,11 @@ public class UserPatchController : ControllerBase
             return StatusCode(200, ManageResponse.Successfull("La cuenta ya se encuentra suspendida"));
         }
 
-        // If the user account is already suspended, return a 200 status with a success message.
-        userFind.IdState = 3;
+            // If the user account is already suspended, return a 200 status with a success message.
+            userFind.IdState = 3;
+            userFind.SuspensionDate = DateOnly.FromDateTime(DateTime.Now);
+            userFind.ReactivationDate = (userFind.SuspensionDate ?? DateOnly.FromDateTime(DateTime.Now)).AddDays(5);
+        
 
         // Create a response object with user information.
         await _dbContext.SaveChangesAsync();
