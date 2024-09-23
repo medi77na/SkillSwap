@@ -102,6 +102,10 @@ public class AuthController : ControllerBase
 
         // Generar el token de restauración
         var resetToken = GenerateJwtToken();
+        if (resetToken.Length > 255)
+        {
+            resetToken = resetToken.Substring(0, 255);
+        }
         user.PasswordResetToken = resetToken;
         user.PasswordResetTokenExpiry = DateTime.Now.AddHours(24);
 
