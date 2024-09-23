@@ -1,11 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SkillSwap.Dtos.User;
 using SkillSwap.Models;
 using SkillSwap.Services;
 
-namespace SkillSwap.Validations;
-public static class UserValidation
+namespace SkillSwap.Validations
 {
+    public class UserPutValidation{
     public static async Task<string> GeneralValidationAsync(AppDbContext _dbContext, [FromBody] UserPostDTO userDTO)
     {
 
@@ -33,12 +37,6 @@ public static class UserValidation
             return "Apellido inválido";
         }
 
-        //Check if email is already registered
-        if (await DataValidator.LookForRepeatEmail(_dbContext, userDTO.Email))
-        {
-            return "Correo Existente";
-        }
-
         //Check if birthday is not null
         if (!DataValidator.ValidateContainNotNull(userDTO.Birthdate))
         {
@@ -59,4 +57,5 @@ public static class UserValidation
 
         return "correcto";
     }
+}
 }
