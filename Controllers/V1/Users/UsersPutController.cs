@@ -21,7 +21,19 @@ public class UsersPutController : ControllerBase
         _mapper = mapper;
     }
 
-    /// Updates a user based on the provided user ID.
+    /// <summary>
+    /// Update a user by their own action
+    /// </summary>
+    /// <remarks>
+    /// This endpoint allows a user to update their own information based on the provided `UserPostDTO` object.
+    /// </remarks>
+    /// <param name="id">The ID of the user to be updated</param>
+    /// <param name="userDTO">The updated user data sent in the request body</param>
+    /// <returns>
+    /// Returns an HTTP status code:
+    /// - 200 OK: If the user information is successfully updated.
+    /// - 400 Bad Request: If the user is not found or if the validation fails.
+    /// </returns>
     [HttpPut("PutUserByUser")]
     public async Task<IActionResult> PutByUser(int id, UserPostDTO userDTO)
     {
@@ -29,14 +41,14 @@ public class UsersPutController : ControllerBase
         // Check if the user exists in the database by ID
         if (!await CheckExist(id))
         {
-            return StatusCode(400, ManageResponse.ErrorBadRequest("User not found."));
+            return StatusCode(400, ManageResponse.ErrorBadRequest("Usuario no encontrado."));
         }
 
         // Validate the user data provided in the DTO.
         var userFinded = await UserValidation.GeneralValidationAsync(_dbContext, userDTO);
 
         // If validation fails, return a 400 Bad Request response.
-        if (userFinded != "correct user")
+        if (userFinded != "correcto")
         {
             return StatusCode(400, ManageResponse.ErrorBadRequest(userFinded));
         }
@@ -51,7 +63,19 @@ public class UsersPutController : ControllerBase
         return StatusCode(200, ManageResponse.Successfull("El usuario ha sido actulizado"));
     }
 
-    /// Updates a user based on the provided user ID from the admin perspective.
+    /// <summary>
+    /// Update a user by an administrator
+    /// </summary>
+    /// <remarks>
+    /// This endpoint allows an administrator to update a user's information based on the provided `UserPutAdminDTO` object.
+    /// </remarks>
+    /// <param name="id">The ID of the user to be updated</param>
+    /// <param name="userDTO">The updated user data sent in the request body</param>
+    /// <returns>
+    /// Returns an HTTP status code:
+    /// - 200 OK: If the user information is successfully updated.
+    /// - 404 Not Found: If the user is not found in the database.
+    /// </returns>
     [HttpPut("PutUserByUserAdmin")]
     public async Task<IActionResult> PutByUserFromAdmin(int id, UserPutAdminDTO userDTO)
     {
@@ -65,6 +89,13 @@ public class UsersPutController : ControllerBase
             return StatusCode(404, ManageResponse.ErrorNotFound());
         }
 
+        if (userDTO.IdStateUser == 3)
+        {
+            userDTO.SuspensionDate = DateOnly.FromDateTime(DateTime.Now);
+            userDTO.ReactivationDate = (userFinded.SuspensionDate ?? DateOnly.FromDateTime(DateTime.Now)).AddDays(5);
+        }
+        
+
         // Map the updated data from the DTO to the found user entity.
         _mapper.Map(userDTO, userFinded);
 
@@ -75,11 +106,26 @@ public class UsersPutController : ControllerBase
         return StatusCode(200, ManageResponse.Successfull("El usuario ha sido actualizado"));
     }
 
+    /// <summary>
+    /// Update user status based on a specified action
+    /// </summary>
+    /// <remarks>
+    /// Endpoint to either enable or disable a user account based on the action provided ("habilitar" to enable, "deshabilitar" to disable).
+    /// </remarks>
+    /// <param name="id">The ID of the user to be updated</param>
+    /// <param name="action">The action to perform on the user account, either "habilitar" or "deshabilitar"</param>
+    /// <returns>
+    /// Returns an HTTP status code:
+    /// - 200 OK: If the user account status is successfully updated or if the account is already in the desired state.
+    /// - 400 Bad Request: If the action is not recognized.
+    /// - 404 Not Found: If the user with the specified ID is not found.
+    /// The response includes a success message and the updated user information, or an error message in case of failure.
+    /// </returns>
     [HttpPut("PutUserByAction")]
     public async Task<IActionResult> PutUserByAction(int id, string action)
     {
 
-        string message ="";
+        string message = "";
 
         // Find the user by ID, including the user's state navigation
         var userFind = await _dbContext.Users
@@ -121,10 +167,12 @@ public class UsersPutController : ControllerBase
             {
                 return StatusCode(200, ManageResponse.SuccessfullWithObject("El usuario reportado ya se encuentra deshabilitado", response));
             }
-             userFind.IdState = 2;
-             message = "El estado de la cuenta ha sido deshabilitada";
-        }else{
-             return StatusCode(400, ManageResponse.ErrorBadRequest("Acción no reconocida."));
+            userFind.IdState = 2;
+            message = "El estado de la cuenta ha sido deshabilitada";
+        }
+        else
+        {
+            return StatusCode(400, ManageResponse.ErrorBadRequest("Acción no reconocida."));
         }
 
         // Save changes to the database

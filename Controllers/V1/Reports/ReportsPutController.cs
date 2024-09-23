@@ -19,7 +19,20 @@ namespace SkillSwap.Controllers.V1.Reports
             _dbContext = dbContext;
         }
 
-        // PUT action for updating the status of a report
+        /// <summary>
+        /// Executes an action on a report, such as suspending or enabling a user.
+        /// </summary>
+        /// <remarks>
+        /// This endpoint allows users to take actions on a report based on the specified action type. 
+        /// Actions include suspender (suspending), (enabling), or disabling a user associated with the report.
+        /// </remarks>
+        /// <param name="reportDTO">The report action data transfer object containing the report ID, action taken, and user IDs.</param>
+        /// <returns>
+        /// A 200 OK response with a success message and updated report information if the action is successful.
+        /// A 400 Bad Request response if any required fields are missing or if an unrecognized action is provided.
+        /// A 404 Not Found response if the report does not exist or if associated users are not found.
+        /// </returns>
+        
         [HttpPut("PutReportByAction")]
         public async Task<IActionResult> PutReportByAction([FromBody] ReportActionDTO reportDTO)
         {
