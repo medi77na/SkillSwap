@@ -45,7 +45,7 @@ public class UsersPutController : ControllerBase
         }
 
         // Validate the user data provided in the DTO.
-        var userFinded = await UserValidation.GeneralValidationAsync(_dbContext, userDTO);
+        var userFinded = await UserPutValidation.GeneralValidationAsync(_dbContext, userDTO);
 
         // If validation fails, return a 400 Bad Request response.
         if (userFinded != "correcto")

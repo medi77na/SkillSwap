@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SkillSwap.Interfaces;
 using SkillSwap.Models;
 using SkillSwap.Services;
 
@@ -13,8 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 Env.Load();
 
+builder.Services.AddSignalR();
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllers();
+
+var smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST");
+var smtpPort = Environment.GetEnvironmentVariable("SMTP_PORT");
+var smtpUser = Environment.GetEnvironmentVariable("SMTP_USER");
+var smtpPass = Environment.GetEnvironmentVariable("SMTP_PASS");
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -95,6 +104,8 @@ var app = builder.Build();
 
 // Use the CORS policy
 app.UseCors("AllowSpecificOrigin");
+
+app.MapHub<ChatHub>("/chathub");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
