@@ -20,6 +20,19 @@ public class ReportsPostController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Creates a new report.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint allows users to create a new report by providing the necessary details.
+    /// The input data is validated before being saved to the database.
+    /// </remarks>
+    /// <param name="reportDTO">The report data transfer object containing the details of the report.</param>
+    /// <returns>
+    /// A 200 OK response with a success message if the report is created successfully.
+    /// A 400 Bad Request response if the validation fails, with a message detailing the validation error.
+    /// </returns>
+
     [HttpPost("PostReportCreate")]
     public async Task<IActionResult> PostReportCreate([FromBody] ReportDTO reportDTO)
     {
@@ -44,6 +57,6 @@ public class ReportsPostController : ControllerBase
         await _dbContext.SaveChangesAsync();
 
         // Return a success response after the report is created.
-        return StatusCode(200,ManageResponse.Successfull("Reporte es creado exitosamente."));
+        return StatusCode(200, ManageResponse.Successfull("Reporte es creado exitosamente."));
     }
 }

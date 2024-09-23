@@ -26,44 +26,56 @@ public class AuthController : ControllerBase
         _passwordHasher = new PasswordHasher<User>();
     }
 
-    // User Login
+    /// <summary>
+    /// Authenticates a user and returns a JWT token.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint allows users to log in by providing their email and password.
+    /// If the credentials are valid, a JWT token is generated and returned along with user details.
+    /// </remarks>
+    /// <param name="userLoginPostDTO">The user's login credentials containing email and password.</param>
+    /// <returns>
+    /// A 200 OK response with a success message and user details including the JWT token.
+    /// A 400 Bad Request response if the email or password fields are empty, with a message indicating "Los campos están vacíos"
+    /// A 401 Unauthorized response if the user does not exist, with a message indicating "Autenticación requerida."
+    /// A 404 Not Found response if the password is incorrect, with a message indicating "Contraseña incorrecta."
+    /// </returns>
+    
     [HttpPost("PostAuthLogin")]
     public async Task<IActionResult> PostAuthLogin([FromBody] AuthDTO userLoginPostDTO)
     {
         // Check if the request body or essential fields (Email and Password) are null or empty.
         if (userLoginPostDTO == null || string.IsNullOrEmpty(userLoginPostDTO.Email) || string.IsNullOrEmpty(userLoginPostDTO.Password))
         {
-            return StatusCode(400,ManageResponse.ErrorBadRequest("fields are empty."));
+            return StatusCode(400, ManageResponse.ErrorBadRequest("Los campos están vacíos."));
         }
 
         // Look for a user in the database with the provided email.
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == userLoginPostDTO.Email);
         if (user == null)
         {
-            return StatusCode(401,ManageResponse.ErrorUnauthorized());
+            return StatusCode(401, ManageResponse.ErrorUnauthorized());
         }
 
         // Verify the password using the password hasher.
         var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, userLoginPostDTO.Password);
         if (passwordVerificationResult == PasswordVerificationResult.Failed)
         {
-            return StatusCode(404, ManageResponse.ErrorBadRequest("Incorrect Password"));
+            return StatusCode(404, ManageResponse.ErrorBadRequest("Contraseña incorrecta"));
         }
 
         // Generate a JWT token for the authenticated user.
         var token = GenerateJwtToken();
 
-        return Ok(new
+        var response = new
         {
-            message = "Success",
-            data = new
-            {
-                id = user.Id,
-                role = user.IdRol,
-                email = user.Email,
-                token
-            }
-        });
+            id = user.Id,
+            role = user.IdRol,
+            email = user.Email,
+            token
+        };
+
+        return StatusCode(200, ManageResponse.SuccessfullWithObject("Éxito", response));
     }
 
     // Generate JWT token for authenticated users

@@ -18,6 +18,19 @@ namespace SkillSwap.Controllers.V1.Reports
             _context = context;
         }
 
+        /// <summary>
+        /// Deletes a report by its ID.
+        /// </summary>
+        /// <remarks>
+        /// This endpoint allows users to delete a report from the database using its unique identifier.
+        /// If the report with the specified ID does not exist, a not found error is returned.
+        /// </remarks>
+        /// <param name="id">The unique identifier of the report to be deleted.</param>
+        /// <returns>
+        /// A 200 OK response with a success message indicating that the report has been deleted.
+        /// A 404 Not Found response if the report with the specified ID does not exist, with a message indicating "No encontrado."
+        /// </returns>
+        
         [HttpDelete("DeleteReportById/{id}")]
         public async Task<IActionResult> DeleteReportById(int id)
         {

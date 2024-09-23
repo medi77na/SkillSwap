@@ -25,8 +25,14 @@ public class RequestsPostController : ControllerBase
     /// Creates a request from one user to another.
     /// </summary>
     /// <remarks>
-    /// method to create a request from one user to another user
+    /// Method to create a request from one user to another user.
     /// </remarks>
+    /// <param name="requestDTO">The DTO containing the details of the request being created.</param>
+    /// <returns>
+    /// A 200 OK response if the request is sent successfully.
+    /// A 400 Bad Request response if the validation fails.
+    /// </returns>
+    
     [HttpPost("PostRequestCreate")]
     public async Task<IActionResult> PostRequestCreate([FromBody] RequestPostDTO requestDTO)
     {
