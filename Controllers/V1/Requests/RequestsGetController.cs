@@ -52,11 +52,11 @@ public class RequestsGetController : ControllerBase
             .Include(r => r.IdReceivingUserNavigation)
             .ToListAsync();
 
-        // Return a 404 status if no requests are found.
-        if (request.Count == 0 && requestSent.Count == 0)
-        {
-            return StatusCode(404, ManageResponse.ErrorNotFound());
-        }
+        // // Return a 404 status if no requests are found.
+        // if (request.Count == 0 && requestSent.Count == 0)
+        // {
+        //     return StatusCode(404, ManageResponse.ErrorNotFound());
+        // }
 
         // Retrieve user details from the database.
         var user = await _dbContext.Users.FindAsync(id);
@@ -118,7 +118,7 @@ public class RequestsGetController : ControllerBase
         }
 
         var requestReceiving = await _dbContext.Requests
-            .Where(r => r.IdReceivingUser == id)
+            .Where(r => r.IdReceivingUser == id && r.IdStateRequest == 1)
             .Select(r => new RequestGetMessagesDTO
             {
                 Id = r.Id,
