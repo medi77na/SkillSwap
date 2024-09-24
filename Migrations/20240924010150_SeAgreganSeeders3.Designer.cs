@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SkillSwap.Models;
 
@@ -11,9 +12,11 @@ using SkillSwap.Models;
 namespace SkillSwap.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240924010150_SeAgreganSeeders3")]
+    partial class SeAgreganSeeders3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,63 +249,6 @@ namespace SkillSwap.Migrations
                     b.HasIndex("IdUser");
 
                     b.ToTable("Reports");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ActionTaken = "Se envió un recordatorio al usuario.",
-                            DateReport = new DateOnly(2024, 9, 1),
-                            Description = "El usuario no respondió a la solicitud de conexión.",
-                            IdReportedUser = 2,
-                            IdState = 1,
-                            IdUser = 1,
-                            TitleReport = "Inactividad en la solicitud"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ActionTaken = "Se revisó el historial de mensajes.",
-                            DateReport = new DateOnly(2024, 9, 2),
-                            Description = "El usuario hizo comentarios ofensivos en la conversación.",
-                            IdReportedUser = 4,
-                            IdState = 1,
-                            IdUser = 3,
-                            TitleReport = "Comportamiento inapropiado"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ActionTaken = "Se notificó al usuario sobre la inactividad.",
-                            DateReport = new DateOnly(2024, 9, 3),
-                            Description = "El usuario ha ignorado múltiples solicitudes de conexión.",
-                            IdReportedUser = 6,
-                            IdState = 1,
-                            IdUser = 5,
-                            TitleReport = "Solicitud de conexión ignorada"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ActionTaken = "Se propuso una reunión para aclarar malentendidos.",
-                            DateReport = new DateOnly(2024, 9, 4),
-                            Description = "Se reportaron malentendidos constantes en el intercambio de mensajes.",
-                            IdReportedUser = 8,
-                            IdState = 1,
-                            IdUser = 7,
-                            TitleReport = "Malentendidos en la comunicación"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ActionTaken = "Se contactó al usuario para ofrecer asistencia.",
-                            DateReport = new DateOnly(2024, 9, 5),
-                            Description = "El usuario solicitó ayuda pero no recibió respuesta.",
-                            IdReportedUser = 10,
-                            IdState = 1,
-                            IdUser = 9,
-                            TitleReport = "Solicitud de consejo no respondida"
-                        });
                 });
 
             modelBuilder.Entity("SkillSwap.Models.Request", b =>
@@ -346,143 +292,6 @@ namespace SkillSwap.Migrations
                     b.HasIndex(new[] { "IdStateRequest" }, "id_state_request");
 
                     b.ToTable("Requests");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Hola, quiero conectar contigo para aprender sobre desarrollo en C#.",
-                            DisponibilitySchedule = "Lunes a Viernes, 9 AM - 5 PM",
-                            IdReceivingUser = 1,
-                            IdRequestingUser = 2,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "¡Hola! Me gustaría aprender sobre diseño gráfico y creo que podrías ayudarme.",
-                            DisponibilitySchedule = "Sábados, 10 AM - 3 PM",
-                            IdReceivingUser = 2,
-                            IdRequestingUser = 3,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Me encantaría aprender más sobre SEO y marketing digital contigo.",
-                            DisponibilitySchedule = "Lunes, Miércoles y Viernes, 1 PM - 4 PM",
-                            IdReceivingUser = 3,
-                            IdRequestingUser = 4,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Hola, estoy interesado en mejorar mis habilidades de comunicación y creo que tú eres la persona adecuada para ayudarme.",
-                            DisponibilitySchedule = "Martes y Jueves, 3 PM - 6 PM",
-                            IdReceivingUser = 4,
-                            IdRequestingUser = 5,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "¡Hola! Me gustaría aprender sobre producción de video y creo que tu experiencia puede ser valiosa.",
-                            DisponibilitySchedule = "Todo el día disponible",
-                            IdReceivingUser = 5,
-                            IdRequestingUser = 6,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "Quiero mejorar mis habilidades en JavaScript, ¿podemos conectar?",
-                            DisponibilitySchedule = "Lunes a Viernes, 10 AM - 5 PM",
-                            IdReceivingUser = 1,
-                            IdRequestingUser = 7,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "Me gustaría aprender más sobre gestión de proyectos, ¿te gustaría ayudarme?",
-                            DisponibilitySchedule = "Sábados, 11 AM - 2 PM",
-                            IdReceivingUser = 2,
-                            IdRequestingUser = 8,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "Estoy interesado en estrategias de contenido, ¿puedes ayudarme?",
-                            DisponibilitySchedule = "Martes y Jueves, 1 PM - 4 PM",
-                            IdReceivingUser = 3,
-                            IdRequestingUser = 9,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Description = "Hola, quiero aprender sobre edición de video y me gustaría tu guía.",
-                            DisponibilitySchedule = "Lunes a Miércoles, 3 PM - 6 PM",
-                            IdReceivingUser = 4,
-                            IdRequestingUser = 10,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Description = "Quiero explorar más sobre análisis de datos, ¿puedes ayudarme?",
-                            DisponibilitySchedule = "Todo el día disponible",
-                            IdReceivingUser = 5,
-                            IdRequestingUser = 1,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Description = "Estoy buscando mejorar mis habilidades en UX/UI, ¿puedes asesorarme?",
-                            DisponibilitySchedule = "Lunes a Viernes, 9 AM - 5 PM",
-                            IdReceivingUser = 6,
-                            IdRequestingUser = 2,
-                            IdStateRequest = 2
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Description = "Me gustaría aprender sobre marketing en redes sociales, ¿puedes ayudarme?",
-                            DisponibilitySchedule = "Sábados, 10 AM - 3 PM",
-                            IdReceivingUser = 7,
-                            IdRequestingUser = 3,
-                            IdStateRequest = 1
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Description = "Hola, quiero mejorar mis habilidades de redacción, ¿podemos conectar?",
-                            DisponibilitySchedule = "Lunes, Miércoles y Viernes, 1 PM - 4 PM",
-                            IdReceivingUser = 8,
-                            IdRequestingUser = 4,
-                            IdStateRequest = 1
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Description = "Quiero aprender sobre producción de contenido, ¿puedes asesorarme?",
-                            DisponibilitySchedule = "Martes y Jueves, 3 PM - 6 PM",
-                            IdReceivingUser = 9,
-                            IdRequestingUser = 5,
-                            IdStateRequest = 1
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Description = "Hola, me gustaría aprender sobre gestión de tiempo y productividad, ¿puedes ayudarme?",
-                            DisponibilitySchedule = "Todo el día disponible",
-                            IdReceivingUser = 10,
-                            IdRequestingUser = 1,
-                            IdStateRequest = 1
-                        });
                 });
 
             modelBuilder.Entity("SkillSwap.Models.Role", b =>
@@ -805,7 +614,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Desarrollador Web",
                             LastName = "zapata",
                             Name = "arlex",
-                            Password = "AQAAAAIAAYagAAAAEG/y9M9sc2MnmCPer0VI0ThMKmGeAmvp+xZaOEUWdznqnGJaS0WHj+JdrmowYawjTw==",
+                            Password = "AQAAAAIAAYagAAAAEHruOsnMbKhFXd6/yay9YBypEcyAHSNZb7Y/JTrL0YxZrJkno8qsHEmrlY4AVEDIow==",
                             PhoneNumber = "+1234567891",
                             UrlGithub = "https://github.com/arlexz96",
                             UrlImage = "https://media.istockphoto.com/id/1200677760/es/foto/retrato-de-apuesto-joven-sonriente-con-los-brazos-cruzados.jpg?s=612x612&w=0&k=20&c=RhKR8pxX3y_YVe5CjrRnTcNFEGDryD2FVOcUT_w3m4w=",
@@ -825,7 +634,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Diseñador Gráfico",
                             LastName = "mena",
                             Name = "franco",
-                            Password = "AQAAAAIAAYagAAAAECfx6CS6ThUVQ8qxXBZF1yAKdeCGun1mV2RDmkAZGRLYWEwKQOZlX6ykccofwOnwIQ==",
+                            Password = "AQAAAAIAAYagAAAAECqJixbLTu6Int3XFt3rjZuppKnxyPqFrabpKrxgYjUqXJQjdsaqNcy1kGgDIElqXQ==",
                             PhoneNumber = "+1234567892",
                             UrlBehance = "https://www.behance.net/franccoina",
                             UrlImage = "https://media.istockphoto.com/id/1200677760/es/foto/retrato-de-apuesto-joven-sonriente-con-los-brazos-cruzados.jpg?s=612x612&w=0&k=20&c=RhKR8pxX3y_YVe5CjrRnTcNFEGDryD2FVOcUT_w3m4w=",
@@ -845,7 +654,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Especialista en Comunicaciones",
                             LastName = "escobar",
                             Name = "jonathan",
-                            Password = "AQAAAAIAAYagAAAAECgOaLcq90wPY/FQL1iWwf59Z7ziR9ch16h0+v5hNEnS/27F9Silp8GABlRioSqmOQ==",
+                            Password = "AQAAAAIAAYagAAAAEFdxBIFNcg+F3QnhiCx4UTNflpYKY7KaIQGgvG5sKwBqc5hxo3O1avoB9BBuZWm+Iw==",
                             PhoneNumber = "+1234567893",
                             UrlImage = "https://st4allthings4p4ci.blob.core.windows.net/allthingshair/allthingshair/wp-content/uploads/sites/13/2023/04/43848/cortes-de-pelo-para-hombres-jovenes-nueva.jpg",
                             UrlLinkedin = "https://www.linkedin.com/in/jonathanescobarm/"
@@ -864,7 +673,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Especialista en Marketing",
                             LastName = "zapata",
                             Name = "joan",
-                            Password = "AQAAAAIAAYagAAAAELqWa+zAY8HDUljJsFml6NEEx2FbvyMbFKtVpozmiWpBcBjZ0Z24J+b3Tks+fiH3oA==",
+                            Password = "AQAAAAIAAYagAAAAEBGmgqjt756eGRvzjvUTU0NueOsT1AGhdMOZERo6O8bZLAcJvYHlWHZoEVKItOFdbQ==",
                             PhoneNumber = "+1234567894",
                             UrlImage = "https://media.istockphoto.com/id/1319763895/es/foto/sonriente-raza-mixta-hombre-maduro-sobre-fondo-gris.jpg?s=612x612&w=0&k=20&c=sGBwMEZr8RdyFuOF0084teSTc1TwMzdpHjowP9QRWTw=",
                             UrlLinkedin = "https://www.linkedin.com/in/davebrown"
@@ -883,7 +692,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Productora de Entretenimiento",
                             LastName = "ramirez",
                             Name = "luisa",
-                            Password = "AQAAAAIAAYagAAAAEOrFECYXu4ykRPjUxbnvLoD81NMQugNd7CGcWpI4XA2c9Xl50anFSjt2Nkx1REuOQA==",
+                            Password = "AQAAAAIAAYagAAAAEN9fBAoMmgfs822RMB3fyT4Mwa+o+8N8w5yGDR6lhyZJxSKcoVQ2u2aPD5/OXMGmfw==",
                             PhoneNumber = "+1234567895",
                             UrlImage = "https://media.istockphoto.com/id/1369508766/es/foto/hermosa-mujer-latina-exitosa-sonriendo.jpg?s=612x612&w=0&k=20&c=f-3MdwiVjpE4UWQdqLC3vpWViYMCiGUPr5aKLCmTnDI=",
                             UrlLinkedin = "https://www.linkedin.com/in/luisa-fernanda-ram%C3%ADrez-cardona-0b486565/"
@@ -902,7 +711,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Desarrolladora Frontend",
                             LastName = "Torres",
                             Name = "Laura",
-                            Password = "AQAAAAIAAYagAAAAENlPs60ndNZH44xDaMRq534FlwGMlDRjCsEjBAjVXQVZS7UZvD2n4IGgNXWSdFDLjw==",
+                            Password = "AQAAAAIAAYagAAAAELpqOPl4r8ACDYYf8KfRxZIDWjrTJ3oS0EZur5/cuu1pkJy/bFqcMJcVrcQr22TB5g==",
                             PhoneNumber = "+1234567801",
                             UrlGithub = "https://github.com/lauratorres",
                             UrlImage = "https://randomuser.me/api/portraits/women/6.jpg",
@@ -922,7 +731,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Analista de Datos",
                             LastName = "Ramírez",
                             Name = "Javier",
-                            Password = "AQAAAAIAAYagAAAAEDAMQgrXHiyyK3ooQEq9pVEkx6seuBcttAnoNx17H5+h5q0w7N8jLnUZH8hrPxL2KA==",
+                            Password = "AQAAAAIAAYagAAAAEEXEFAUcr56TewfkPksfpNPNhyCqn/PW9CHmBHTNHQmmiT3gmMrH/RtLiz7r39+Z8A==",
                             PhoneNumber = "+1234567802",
                             UrlImage = "https://randomuser.me/api/portraits/men/7.jpg",
                             UrlLinkedin = "https://www.linkedin.com/in/javierramirez"
@@ -941,7 +750,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Gestora de Redes Sociales",
                             LastName = "Gómez",
                             Name = "Sofía",
-                            Password = "AQAAAAIAAYagAAAAEP1GfVqTAd/gV6x8RtHW/zxwkQ9Jv//nl2lQXKxLVdzA5NxqomHieesHBKuxwwoDLg==",
+                            Password = "AQAAAAIAAYagAAAAEFSRiiyzMgNF8ihmuFEQri/AMpVJ4hUBl9OHzR91EwFpeAz+TIH0DW4+iuMERMRlrQ==",
                             PhoneNumber = "+1234567803",
                             UrlBehance = "https://www.behance.net/sofiagomez",
                             UrlImage = "https://randomuser.me/api/portraits/women/8.jpg",
@@ -961,7 +770,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Productor de Cine",
                             LastName = "Martínez",
                             Name = "Fernando",
-                            Password = "AQAAAAIAAYagAAAAEOPYYe7ov8KXL6dvtuIFEKsqmjvoZlILBfj8ID9PR/tslFr4eEzJtn5c5GnToJ8OJw==",
+                            Password = "AQAAAAIAAYagAAAAEDsbClb67rAQ68ich9R51O7RrlGB39ClA/ZhGRQ1acnIBc4R2htUQQrO4nwzs42JNQ==",
                             PhoneNumber = "+1234567804",
                             UrlImage = "https://randomuser.me/api/portraits/men/9.jpg",
                             UrlLinkedin = "https://www.linkedin.com/in/fernandomartinez"
@@ -980,7 +789,7 @@ namespace SkillSwap.Migrations
                             JobTitle = "Desarrolladora Móvil",
                             LastName = "Pérez",
                             Name = "Valentina",
-                            Password = "AQAAAAIAAYagAAAAEG5uY2bDFQdH5/wExL5BY3QmclQ9V4YqpC3JJH8SlgZkHuPxpqDhTDca0blyUwAKBw==",
+                            Password = "AQAAAAIAAYagAAAAEEnUgtOTa25XVw/HzmgAgiY4ZA+jtHveiqVxc24+tC72VlEdbL8su8csCtZZMvVNww==",
                             PhoneNumber = "+1234567805",
                             UrlGithub = "https://github.com/valentinaperez",
                             UrlImage = "https://randomuser.me/api/portraits/women/10.jpg",
