@@ -196,7 +196,7 @@ public class UsersGetController : ControllerBase
             FullName = u.FullName,
             JobTitle = u.JobTitle,
             Qualification = u.Qualification.Count > 0 ? (double)u.Qualification.acummulator / u.Qualification.Count : 0,
-            CountMatches = requestCounts.Count,
+            CountMatches = requestCounts.FirstOrDefault(r => r.UserId == u.Id) ? .Count ?? 0,
             Description = u.Description,
             Abilities = u.Abilities,
             UrlImage = u.Image
