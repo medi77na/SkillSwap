@@ -147,7 +147,7 @@ public class RequestsGetController : ControllerBase
     /// </returns>
     
     [HttpGet("GetRequestViewDetails")]
-    public async Task<IActionResult> GetRequestViewDetails(int currectId, int requestId)
+    public async Task<IActionResult> GetRequestViewDetails(int? currectId, int? requestId)
     {
         if (currectId == null || requestId == null)
         {
@@ -155,7 +155,7 @@ public class RequestsGetController : ControllerBase
         }
 
         var request = await _dbContext.Requests
-                                .Where(r => r.IdReceivingUser == currectId && r.IdRequestingUser == requestId)
+                                .Where(r => (r.IdReceivingUser == currectId && r.IdRequestingUser == requestId) || (r.IdReceivingUser == requestId && r.IdRequestingUser == currectId))
                                 .FirstOrDefaultAsync();
 
         bool response;

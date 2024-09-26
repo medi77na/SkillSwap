@@ -1,0 +1,44 @@
+
+Documentación general del proyecto 
+
+	Opcion 1: https://www.notion.so/SKILLSWAP-8fa0afeb7d144278894d643549d1e669?pvs=4
+
+	Opcion 2: https://plum-pig-ed5.notion.site/SKILLSWAP-8fa0afeb7d144278894d643549d1e669?pvs=4
+	
+App desplegada en:
+
+	https://skill-swap-app-pink.vercel.app/
+
+Diseño UI & UX (Figma):
+
+	 https://www.figma.com/design/FEDH5WgaGXBLSr2xBBA8OV/Ruta-Avanzada-Mockup?node-id=0-1&t=RrlICKGxMr1mrrMZ-1
+
+Repositorio Frontend: 
+
+	https://github.com/luisaramicar11/skillSwap
+
+Repositorio Backend: 
+	
+	https://github.com/medi77na/SkillSwap
+
+Notas:
+
+- Los casos de uso, diagramas relacionales y requisitos se encuentran en la documentación del proyecto en los links mencionados anteriormente.
+
+- Las variables de entorno .ENV para el repositorio del Backend:
+
+DB_HOST = bbmimaiyfi63dr4j7mr3-mysql.services.clever-cloud.com
+DB_DATABASE = bbmimaiyfi63dr4j7mr3
+DB_USERNAME = u307zbbd8mitdndo
+DB_PASSWORD = F4Yg2Lq224SzonFzcbtv
+DB_PORT = 3306
+
+JWT_KEY=79gK6ueP6g35cAUV20OgpsnGwrKQt7ayhWi
+JWT_ISSUER=http://localhost:5140
+JWT_AUDIENCE=http://localhost:5140
+JWT_EXPIREMINUTES=60
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=skillswap4@gmail.com
+SMTP_PASS=akyihdrhsomjuhah
