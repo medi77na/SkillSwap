@@ -113,7 +113,7 @@ public class AuthController : ControllerBase
 
 
         // Enviar el correo
-        var resetLink = $"{Request.Scheme}://{Request.Host}/reset-password?token={resetToken}";
+        var resetLink = $"?token={resetToken}";
         await _emailService.SendPasswordResetEmail(user.Email, resetLink);
 
         return Ok("El enlace de restauración ha sido enviado al correo.");

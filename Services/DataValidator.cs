@@ -40,7 +40,7 @@ public class DataValidator
         {
             return false;
         }
-        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d).+$");
+        var passwordRegex = new Regex(@"\d");
 
         return passwordRegex.IsMatch(password);
     }
